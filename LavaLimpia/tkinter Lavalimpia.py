@@ -25,7 +25,7 @@ etiqueta3 = tkinter.Label(ventana, text= "Ingrese contraseña:",font=("Arial", 1
 etiqueta3.configure(bg="#3f88c5")
 etiqueta3.place(x=450,y=250,)
 
-Texto = tkinter.Entry(ventana)
+Texto = tkinter.Entry(ventana,show="*")
 Texto.place(x=450,y=300,width=250, height=30)
 
 boton1 =tkinter.Button(ventana, text="Iniciar sesion",font=("Arial", 20))  # es una boton 
