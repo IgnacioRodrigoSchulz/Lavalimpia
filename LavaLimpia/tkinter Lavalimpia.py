@@ -118,14 +118,14 @@ def recuperacion():
                 logo2.lower()
 
 
-                etiqRecu3_1 = tkinter.Label(ventaRecu3, text= "Ingrese el código:",font=("Arial", 12))#es una etiqueta
+                etiqRecu3_1 = tkinter.Label(ventaRecu3, text= "Ingrese su nueva contraseña:",font=("Arial", 12))#es una etiqueta
                 etiqRecu3_1.configure(bg="#188999")
                 etiqRecu3_1.place(x=280,y=165) 
 
                 textRecu3_1 = tkinter.Entry(ventaRecu3)
                 textRecu3_1.place(x=280,y=190, width=250, height=30)
 
-                etiqRecu3_2 = tkinter.Label(ventaRecu3, text= "Ingrese el código:",font=("Arial", 12))#es una etiqueta
+                etiqRecu3_2 = tkinter.Label(ventaRecu3, text= "Confirme su nueva contraseña:",font=("Arial", 12))#es una etiqueta
                 etiqRecu3_2.configure(bg="#188999")
                 etiqRecu3_2.place(x=280,y=225) 
 
