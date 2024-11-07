@@ -4,7 +4,7 @@ imagenes=[]
 
 ventana = tkinter.Tk()  #sirve para crear una ventana
 ventana.geometry("950x550")#es para el tamaño de la ventana
-ventana.title("Lavalimpia") #Es para el titulo
+ventana.title("Lavalimpia-Inicio de sesión") #Es para el titulo
 ventana.configure(bg="#188999")
 ventana.resizable(False,False)
 
@@ -38,7 +38,7 @@ etiqueta3.place(x=380,y=275)
 Texto = tkinter.Entry(ventana,show="*")
 Texto.place(x=380,y=300,width=250, height=30)
 
-boton1 =tkinter.Button(ventana, text="Iniciar sesion",font=("Arial", 20))  # es un boton 
+boton1 =tkinter.Button(ventana, text="Iniciar sesión",font=("Arial", 20))  # es un boton 
 boton1.place(x=380,y=350,width=250, height=30) 
 
 def recuperacion():
@@ -135,7 +135,7 @@ def recuperacion():
                 botonRecu3 =tkinter.Button(ventaRecu3, text="Cambiar contraseña",font=("Arial", 18))  # es un boton 
                 botonRecu3.place(x=545,y=250,width=250, height=30)
     
-        botonRecu2 =tkinter.Button(ventaRecu2, text="Enviar código ",font=("Arial", 20),command=nuevaC)  # es un boton 
+        botonRecu2 =tkinter.Button(ventaRecu2, text="Ingresar código",font=("Arial", 20),command=nuevaC)  # es un boton 
         botonRecu2.place(x=545,y=190,width=250, height=30)
      
 
@@ -205,4 +205,3 @@ boton2.place(x=380,y=450)
 ventana.iconbitmap("fondoL.ico") #es el icono 
 
 ventana.mainloop() #sirve para el registro del programa
-
