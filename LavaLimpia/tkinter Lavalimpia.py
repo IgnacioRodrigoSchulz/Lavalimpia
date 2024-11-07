@@ -143,7 +143,7 @@ def recuperacion():
     botonRecu.place(x=545,y=190,width=250, height=30) 
     ventaRecu.mainloop()
 
-OlvidoContraseña = tkinter.Button(ventana, text= "¿Olvido su  contraseña?",font=("Arial", 10),bd=0,cursor="hand2",command=recuperacion)
+OlvidoContraseña = tkinter.Button(ventana, text= "¿Olvidó su contraseña?",font=("Arial", 10),bd=0,cursor="hand2",command=recuperacion)
 OlvidoContraseña.configure(bg="#188999")
 OlvidoContraseña.place(x=380,y=420)
 
