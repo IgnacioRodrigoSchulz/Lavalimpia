@@ -2,6 +2,11 @@ import tkinter #sirve para importar tkinter para poder  crear interfaces gráfic
 
 imagenes=[] #aquí se almacenan las imagenes de fondo
 
+ventana = None
+ventaRecu = None
+ventaRecu2 = None
+ventaRecu3 = None
+
 ventana = tkinter.Tk()  # Aqui se crea la ventana principal
 ventana.geometry("950x550")#es para el tamaño de la ventana
 ventana.title("Lavalimpia-Inicio de sesión") #Es para el titulo de la ventana
@@ -19,7 +24,6 @@ logo.place(x=0,y =0)
 foto_logo2= tkinter.PhotoImage(file="Logo2.png")
 logo2=tkinter.Label(ventana,image=foto_logo2,bd=0)
 logo2.place(x=65,y=280)
-
 
 etiqueta2 = tkinter.Label(ventana, text= "Ingrese usuario o E-mail",font=("Arial", 15))#es una etiqueta
 etiqueta2.configure(bg="#188999")
@@ -39,7 +43,9 @@ boton1 =tkinter.Button(ventana, text="Iniciar sesión",font=("Arial", 20))  # es
 boton1.place(x=380,y=350,width=250, height=30) 
 
 def recuperacion():
-    ventana.destroy() #se destruye la ventana 
+    global ventana, ventaRecu
+    if ventana:
+        ventana.destroy()  # Destruye la ventana principal 
     ventaRecu=tkinter.Tk() #se abre otra ventana 
     ventaRecu.geometry("950x550")#es para el tamaño de la ventana
     ventaRecu.title("Lavalimpia-Recuperación contraseña") #Es para el titulo
@@ -64,8 +70,15 @@ def recuperacion():
     textRecu = tkinter.Entry(ventaRecu)
     textRecu.place(x=280,y=190, width=250, height=30)
 
-    def envioCo():
-        ventaRecu.destroy()
+    botonRecu =tkinter.Button(ventaRecu, text="Enviar código ",font=("Arial", 20),command=envioCo)  # es un boton 
+    botonRecu.place(x=545,y=190,width=250, height=30) 
+    ventaRecu.iconbitmap("fondoL.ico")
+    ventaRecu.mainloop()
+
+def envioCo():
+    global ventaRecu, ventaRecu2
+    if ventaRecu:
+        ventaRecu.destroy()     
         ventaRecu2=tkinter.Tk()  
         ventaRecu2.geometry("950x550")
         ventaRecu2.title("Lavalimpia-Recuperacion contraseña") 
@@ -82,55 +95,58 @@ def recuperacion():
         logo2=tkinter.Label(ventaRecu2,image=foto_logo2,bd=0)
         logo2.place(x=65,y=280)
                 
-        etiqRecu2 = tkinter.Label(ventaRecu2, text= "Ingrese el código:",font=("Arial", 12))#es una etiqueta
+        etiqRecu2 = tkinter.Label(ventaRecu2, text= "Ingrese el código:",font=("Arial", 12))
         etiqRecu2.configure(bg="#188999")
         etiqRecu2.place(x=280,y=165) 
 
         textRecu2 = tkinter.Entry(ventaRecu2)
         textRecu2.place(x=280,y=190, width=250, height=30)
-    
-        def nuevaC():
-                ventaRecu2.destroy()
-                ventaRecu3=tkinter.Tk()  
-                ventaRecu3.geometry("950x550")#es para el tamaño de la ventana
-                ventaRecu3.title("Lavalimpia-Recuperacion contraseña") #Es para el titulo
-                ventaRecu3.configure(bg="#188999")
-                ventaRecu3.resizable(False,False)
-
-                foto_logo1= tkinter.PhotoImage(file="logoLavaLimpia.png")
-                imagenes.append(foto_logo1)
-                logo=tkinter.Label(ventaRecu3, image=foto_logo1,bd=0)
-                logo.place(x=0,y =0)
-                
-                foto_logo2= tkinter.PhotoImage(file="Logo2.png")
-                imagenes.append(foto_logo2)
-                logo2=tkinter.Label(ventaRecu3,image=foto_logo2,bd=0)
-                logo2.place(x=65,y=280)
-                
-                etiqRecu3_1 = tkinter.Label(ventaRecu3, text= "Ingrese su nueva contraseña:",font=("Arial", 12))#es una etiqueta
-                etiqRecu3_1.configure(bg="#188999")
-                etiqRecu3_1.place(x=280,y=165) 
-
-                textRecu3_1 = tkinter.Entry(ventaRecu3)
-                textRecu3_1.place(x=280,y=190, width=250, height=30)
-
-                etiqRecu3_2 = tkinter.Label(ventaRecu3, text= "Confirme su nueva contraseña:",font=("Arial", 12))#es una etiqueta
-                etiqRecu3_2.configure(bg="#188999")
-                etiqRecu3_2.place(x=280,y=225) 
-
-                textRecu3_2 = tkinter.Entry(ventaRecu3)
-                textRecu3_2.place(x=280,y=250, width=250, height=30)
-    
-                botonRecu3 =tkinter.Button(ventaRecu3, text="Cambiar contraseña",font=("Arial", 18))  # es un boton 
-                botonRecu3.place(x=545,y=250,width=250, height=30)
-    
-        botonRecu2 =tkinter.Button(ventaRecu2, text="Ingresar código",font=("Arial", 20),command=nuevaC)  # es un boton 
+        
+        botonRecu2 =tkinter.Button(ventaRecu2, text="Ingresar código",font=("Arial", 20),command=nuevaC)
         botonRecu2.place(x=545,y=190,width=250, height=30)
-     
+        
+        ventaRecu2.iconbitmap("fondoL.ico")
+        ventaRecu2.mainloop()
 
-    botonRecu =tkinter.Button(ventaRecu, text="Enviar código ",font=("Arial", 20),command=envioCo)  # es un boton 
-    botonRecu.place(x=545,y=190,width=250, height=30) 
-    ventaRecu.mainloop()
+def nuevaC():
+    global ventaRecu2, ventaRecu3
+    if ventaRecu2:
+        ventaRecu2.destroy()      
+    ventaRecu3=tkinter.Tk()  
+    ventaRecu3.geometry("950x550")
+    ventaRecu3.title("Lavalimpia-Recuperación contraseña") 
+    ventaRecu3.configure(bg="#188999")
+    ventaRecu3.resizable(False,False)
+
+    foto_logo1= tkinter.PhotoImage(file="logoLavaLimpia.png")
+    imagenes.append(foto_logo1)
+    logo=tkinter.Label(ventaRecu3, image=foto_logo1,bd=0)
+    logo.place(x=0,y =0)
+                
+    foto_logo2= tkinter.PhotoImage(file="Logo2.png")
+    imagenes.append(foto_logo2)
+    logo2=tkinter.Label(ventaRecu3,image=foto_logo2,bd=0)
+    logo2.place(x=65,y=280)
+                
+    etiqRecu3_1 = tkinter.Label(ventaRecu3, text= "Ingrese su nueva contraseña:",font=("Arial", 12))
+    etiqRecu3_1.configure(bg="#188999")
+    etiqRecu3_1.place(x=280,y=165) 
+
+    textRecu3_1 = tkinter.Entry(ventaRecu3)
+    textRecu3_1.place(x=280,y=190, width=250, height=30)
+
+    etiqRecu3_2 = tkinter.Label(ventaRecu3, text= "Confirme su nueva contraseña:",font=("Arial", 12))
+    etiqRecu3_2.configure(bg="#188999")
+    etiqRecu3_2.place(x=280,y=225) 
+
+    textRecu3_2 = tkinter.Entry(ventaRecu3)
+    textRecu3_2.place(x=280,y=250, width=250, height=30)
+    
+    botonRecu3 =tkinter.Button(ventaRecu3, text="Cambiar contraseña",font=("Arial", 18))  
+    botonRecu3.place(x=545,y=250,width=250, height=30)
+    
+    ventaRecu3.iconbitmap("fondoL.ico")
+    ventaRecu3.mainloop()
 
 OlvidoContraseña = tkinter.Button(ventana, text= "¿Olvidó su contraseña?",font=("Arial", 10),bd=0,cursor="hand2",command=recuperacion) #boton que llama a la función con la variable command   
 OlvidoContraseña.configure(bg="#188999")
@@ -152,7 +168,7 @@ def registro():
     foto_logo2= tkinter.PhotoImage(file="Logo2.png")
     logo2=tkinter.Label(ventRegistro,image=foto_logo2,bd=0)
     logo2.place(x=65,y=280)
-    
+        
     etiq1 = tkinter.Label(ventRegistro, text= "Nuevo nombre de usuario: ",font=("Arial", 12))#es una etiqueta
     etiq1.configure(bg="#188999")
     etiq1.place(x=380,y=165) 
@@ -184,6 +200,8 @@ def registro():
     registro =tkinter.Button(ventRegistro, text="Crear cuenta",font=("Arial", 20))  # es un boton 
     registro.place(x=380,y=410,width=250, height=30) 
 
+    ventRegistro.iconbitmap("fondoL.ico")
+     
     ventRegistro.mainloop()
 
 boton2 = tkinter.Button(ventana, text="Crear cuenta de usuario",font=("Arial", 15),cursor="hand2",command=registro) #boton que llama a la funcion registro, con la variable command  
