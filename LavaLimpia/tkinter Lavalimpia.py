@@ -152,8 +152,6 @@ def registro():
     foto_logo2= tkinter.PhotoImage(file="Logo2.png")
     logo2=tkinter.Label(ventRegistro,image=foto_logo2,bd=0)
     logo2.place(x=65,y=280)
-    logo2.lower()
-
     
     etiq1 = tkinter.Label(ventRegistro, text= "Nuevo nombre de usuario: ",font=("Arial", 12))#es una etiqueta
     etiq1.configure(bg="#188999")
