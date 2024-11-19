@@ -1,5 +1,5 @@
 import tkinter #sirve para importar tkinter para poder  crear interfaces gráficas 
-
+from tkinter import messagebox
 imagenes=[] #aquí se almacenan las imagenes de fondo
 
 ventana = None
@@ -7,40 +7,64 @@ ventaRecu = None
 ventaRecu2 = None
 ventaRecu3 = None
 
-ventana = tkinter.Tk()  # Aqui se crea la ventana principal
-ventana.geometry("950x550")#es para el tamaño de la ventana
-ventana.title("Lavalimpia-Inicio de sesión") #Es para el titulo de la ventana
-ventana.configure(bg="#188999") #Color del fondo de la ventana
-ventana.resizable(False,False) # se desactiva el cambio de tamaño de la ventana
+def guardarDatos(usuario, correo, contrasena, confirmar_contrasena):
+    if not usuario or not correo or not contrasena or not confirmar_contrasena: 
+        messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.") 
+        return 
+    if contrasena != contrasena: 
+        messagebox.showerror("Error", "Las contraseñas no coinciden.") 
+    messagebox.showinfo("Éxito", "Datos registrados correctamente.") # Aquí puedes llamar a otra función o realizar otra acción  
 
-etiqueta1 = tkinter.Label(ventana, text="Inicio de sesión", font=("Britannic Bold", 20))  #es una etiqueta de inisio de sesión  y el tamaño de fuente
-etiqueta1.configure(bg="#188999")
-etiqueta1.place(x=380, y=165) # ubica la etiqueta en la ventana
 
-foto_logo1= tkinter.PhotoImage(file="logoLavaLimpia.png") #importa la imagen desde la carpeta 
-logo=tkinter.Label(ventana, image=foto_logo1,bd=0) # aqui se pone la imagen en la ventana y el bd le quita el borde a la imagen 
-logo.place(x=0,y =0)
+def ventanaPrincipal():
+    global ventana
+    ventana = tkinter.Tk()  # Aqui se crea la ventana principal
+    ventana.geometry("950x550")#es para el tamaño de la ventana
+    ventana.title("Lavalimpia-Inicio de sesión") #Es para el titulo de la ventana
+    ventana.configure(bg="#188999") #Color del fondo de la ventana
+    ventana.resizable(False,False) # se desactiva el cambio de tamaño de la ventana
 
-foto_logo2= tkinter.PhotoImage(file="Logo2.png")
-logo2=tkinter.Label(ventana,image=foto_logo2,bd=0)
-logo2.place(x=65,y=280)
+    etiqueta1 = tkinter.Label(ventana, text="Inicio de sesión", font=("Britannic Bold", 20))  #es una etiqueta de inisio de sesión  y el tamaño de fuente
+    etiqueta1.configure(bg="#188999")
+    etiqueta1.place(x=380, y=165) # ubica la etiqueta en la ventana
 
-etiqueta2 = tkinter.Label(ventana, text= "Ingrese usuario o E-mail",font=("Arial", 15))#es una etiqueta
-etiqueta2.configure(bg="#188999")
-etiqueta2.place(x=380,y=220) 
+    foto_logo1= tkinter.PhotoImage(file="logoLavaLimpia.png") #importa la imagen desde la carpeta 
+    imagenes.append(foto_logo1)
+    logo=tkinter.Label(ventana, image=foto_logo1,bd=0) # aqui se pone la imagen en la ventana y el bd le quita el borde a la imagen 
+    logo.place(x=0,y =0)
 
-TextoIngreso = tkinter.Entry(ventana) # campo donde se ingresa el usuario o gmail
-TextoIngreso.place(x=380,y=245, width=250, height=30)
+    foto_logo2= tkinter.PhotoImage(file="Logo2.png")
+    imagenes.append(foto_logo2)
+    logo2=tkinter.Label(ventana,image=foto_logo2,bd=0)
+    logo2.place(x=65,y=280)
 
-etiqueta3 = tkinter.Label(ventana, text= "Ingrese contraseña:",font=("Arial", 15))#es una etiqueta
-etiqueta3.configure(bg="#188999")
-etiqueta3.place(x=380,y=275)
+    etiqueta2 = tkinter.Label(ventana, text= "Ingrese usuario o E-mail",font=("Arial", 15))#es una etiqueta
+    etiqueta2.configure(bg="#188999")
+    etiqueta2.place(x=380,y=220) 
 
-Texto = tkinter.Entry(ventana,show="*") #campo donde se pone la contraseña, el show reemplaza pero no cambia la letra, mostrando los * 
-Texto.place(x=380,y=300,width=250, height=30)
+    TextoIngreso = tkinter.Entry(ventana) # campo donde se ingresa el usuario o gmail
+    TextoIngreso.place(x=380,y=245, width=250, height=30)
 
-boton1 =tkinter.Button(ventana, text="Iniciar sesión",font=("Arial", 20))  # es un boton, donde se inicia sesión 
-boton1.place(x=380,y=350,width=250, height=30) 
+    etiqueta3 = tkinter.Label(ventana, text= "Ingrese contraseña:",font=("Arial", 15))#es una etiqueta
+    etiqueta3.configure(bg="#188999")
+    etiqueta3.place(x=380,y=275)
+
+    Texto = tkinter.Entry(ventana,show="*") #campo donde se pone la contraseña, el show reemplaza pero no cambia la letra, mostrando los * 
+    Texto.place(x=380,y=300,width=250, height=30)
+
+    boton1 =tkinter.Button(ventana, text="Iniciar sesión",font=("Arial", 20))  # es un boton, donde se inicia sesión 
+    boton1.place(x=380,y=350,width=250, height=30) 
+
+    OlvidoContraseña = tkinter.Button(ventana, text= "¿Olvidó su contraseña?",font=("Arial", 10),bd=0,cursor="hand2",command=recuperacion) #boton que llama a la función con la variable command   
+    OlvidoContraseña.configure(bg="#188999")
+    OlvidoContraseña.place(x=380,y=420)
+
+    boton2 = tkinter.Button(ventana, text="Crear cuenta de usuario",font=("Arial", 15),cursor="hand2",command=registro) #boton que llama a la funcion registro, con la variable command  
+    boton2.place(x=380,y=450)
+
+    ventana.iconbitmap("fondoL.ico") #es el icono 
+
+    ventana.mainloop() #sirve para el registro del programa
 
 def recuperacion():
     global ventana, ventaRecu
@@ -148,11 +172,8 @@ def nuevaC():
     ventaRecu3.iconbitmap("fondoL.ico")
     ventaRecu3.mainloop()
 
-OlvidoContraseña = tkinter.Button(ventana, text= "¿Olvidó su contraseña?",font=("Arial", 10),bd=0,cursor="hand2",command=recuperacion) #boton que llama a la función con la variable command   
-OlvidoContraseña.configure(bg="#188999")
-OlvidoContraseña.place(x=380,y=420)
-
 def registro():
+    global ventana
     ventana.destroy()
     ventRegistro=tkinter.Tk()
     ventRegistro.geometry("950x550")#es para el tamaño de la ventana
@@ -161,11 +182,13 @@ def registro():
     ventRegistro.resizable(False,False)
     
     foto_logo1= tkinter.PhotoImage(file="logoLavaLimpia.png")
+    imagenes.append(foto_logo1)
     logo=tkinter.Label(ventRegistro, image=foto_logo1,bd=0)
     logo.place(x=0,y =0)
     
     
     foto_logo2= tkinter.PhotoImage(file="Logo2.png")
+    imagenes.append(foto_logo2)
     logo2=tkinter.Label(ventRegistro,image=foto_logo2,bd=0)
     logo2.place(x=65,y=280)
         
@@ -173,8 +196,8 @@ def registro():
     etiq1.configure(bg="#188999")
     etiq1.place(x=380,y=165) 
 
-    Text = tkinter.Entry(ventRegistro)
-    Text.place(x=380,y=190, width=250, height=30)
+    Text1 = tkinter.Entry(ventRegistro)
+    Text1.place(x=380,y=190, width=250, height=30)
 
     etiq2 = tkinter.Label(ventRegistro, text= "Ingrese E-mail: ",font=("Arial", 12))#es una etiqueta
     etiq2.configure(bg="#188999")
@@ -197,16 +220,12 @@ def registro():
     Text4 = tkinter.Entry(ventRegistro,show="*")
     Text4.place(x=380,y=355, width=250, height=30)
 
-    registro =tkinter.Button(ventRegistro, text="Crear cuenta",font=("Arial", 20))  # es un boton 
+    registro =tkinter.Button(ventRegistro, text="Crear cuenta",font=("Arial", 20),command=lambda: guardarDatos(Text1.get(), Text2.get(), Text3.get(),Text4.get()))  # es un boton 
+    
     registro.place(x=380,y=410,width=250, height=30) 
 
     ventRegistro.iconbitmap("fondoL.ico")
      
     ventRegistro.mainloop()
 
-boton2 = tkinter.Button(ventana, text="Crear cuenta de usuario",font=("Arial", 15),cursor="hand2",command=registro) #boton que llama a la funcion registro, con la variable command  
-boton2.place(x=380,y=450)
-
-ventana.iconbitmap("fondoL.ico") #es el icono 
-
-ventana.mainloop() #sirve para el registro del programa
+ventanaPrincipal()
