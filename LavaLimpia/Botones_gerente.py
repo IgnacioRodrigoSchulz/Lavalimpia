@@ -9,7 +9,7 @@ ventana.resizable(False,False) # se desactiva el cambio de tamaño de la ventana
 
 
 def salirApp():
-    valor=messagebox.askokcancel(" Cerrar sesión","Estas segurisimo de querer salir?")
+    valor=messagebox.askokcancel(" Cerrar sesión","Estás seguro que quieres salir?")
     if valor==True:
         ventana.destroy()
 
