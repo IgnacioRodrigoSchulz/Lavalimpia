@@ -18,7 +18,7 @@ boton_cerrar.place(x=820,y=20)    #se ubica el boton
 
 
 
-boton1= Button(ventana, text="Buscador de pedidios",font=("arial",18))
+boton1= Button(ventana, text="Buscador de pedidos",font=("arial",18))
 boton1.configure(bg="blue",fg="#ffffff")
 boton1.place(x=200,y=200)
 
