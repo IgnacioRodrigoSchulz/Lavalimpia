@@ -1,195 +1,202 @@
 import tkinter as tk #sirve para importar tkinter para poder  crear interfaces gráficas 
-from tkinter import messagebox
-imagenes=[] 
+from tkinter import messagebox,ttk  # Importa herramientas específicas: messagebox para mensajes emergentes y ttk para widgets avanzados.
+import funciones  # Importa un módulo externo llamado `funciones`
 
-ventana = None
-ventaRecu = None
-ventaRecu2 = None
-ventRegistro= None
-ventana_usuario=None
-
-# Función para configurar la ventana principal
-def configurar_ventana(ventana, titulo, ancho=950, alto=550, color_fondo="#188999", icono=None, redimensionable=(False, False)):
-    ventana.geometry(f"{ancho}x{alto}")
-    ventana.title(titulo)
-    ventana.configure(bg=color_fondo)
-    ventana.resizable(*redimensionable)
-    if icono:
-        ventana.iconbitmap(icono)
-     
-# Función para agregar logos
-def agregar_logo(ventana, archivo, x, y):
-    imagen = tk.PhotoImage(file=archivo)
-    logo = tk.Label(ventana, image=imagen, bd=0)
-    logo.image = imagen  # Necesario para mantener la referencia a la imagen
-    logo.place(x=x, y=y)
-
-# Función para crear etiquetas
-def crear_etiqueta(ventana, texto, fuente, tamano, x, y, **kwargs):
-    etiqueta = tk.Label(ventana, text=texto, font=(fuente, tamano), **kwargs)
-    width = kwargs.get('width', None)
-    height = kwargs.get('height', None)
-    
-    if width and height:
-        etiqueta.place(x=x, y=y, width=width, height=height)
-    else:
-        etiqueta.place(x=x, y=y)
-    
-
-def crear_entry(ventana,x,y,width,height,mostrar=None):
-    entrada=tk.Entry(ventana,show=mostrar) if mostrar else tk.Entry(ventana)
-    entrada.place(x=x,y=y,width=width,height=height)
-    return entrada
-
-def crear_boton(ventana, text, font, x, y, command=None, **kwargs):
-    boton = tk.Button(ventana, text=text, font=font, command=command, **kwargs)
-    width = kwargs.get('width', None)
-    height = kwargs.get('height', None)
-    
-    if width and height:
-        boton.place(x=x, y=y, width=width, height=height)
-    else:
-        boton.place(x=x, y=y)
+class creacion_ventana: #Esta clase es el origen de todas las otras ventanas de la aplicación, donde se establecen configuraciones en común
+    def __init__(self,titulo, ancho=950, alto=550, color_fondo="#188999", icono=None, redimensionable=(False, False)): #__init__ es el método se llama automáticamente cuando se crea un objeto de una clase. (inicializa los atributos deacuerdo al objeto)
+        self.ventana=tk.Tk() # crea la ventana principal
+        self.ventana.geometry(f"{ancho}x{alto}") # defina las dimensiones de la ventana
+        self.ventana.title(titulo) # establece el título que tendrá la ventana
+        self.ventana.configure(bg=color_fondo) #cambia el color del fondo
+        self.ventana.resizable(*redimensionable) #define si la ventana puede cambiar de tamaño
+        if icono:
+            self.ventana.iconbitmap(icono) # esto asigna un ícono a la venta si se le proporcionace uno
         
-    return boton
-       
-def guardarDatos(usuario, correo, contrasena, confirmar_contrasena):
-    if not usuario or not correo or not contrasena or not confirmar_contrasena: 
-        messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.") 
-        return 
-    if contrasena != confirmar_contrasena: 
-        messagebox.showerror("Error", "Las contraseñas no coinciden.") 
-    messagebox.showinfo("Éxito", "Datos registrados correctamente.")
+    def mostrarVentana(self):
+        self.ventana.mainloop() # ejecuta el bucle principal para que la ventana se pueda mostrar.
     
-    ventRegistro.destroy()
-    ventanaPrincipal()
+    def cambiarVentana(self,nuevaVentana):
+        self.ventana.destroy() #cierra la ventana actual
+        nuevaVentana().mostrarVentana() # abre la nueva ventana 
     
-def inicio_de_sesion():
-    ventana_usuario = tk.Tk()
-    configurar_ventana(ventana_usuario,titulo="Lavalimpia-Usuario",ancho=950, alto=550, color_fondo="#188999", icono=None, redimensionable=(False, False))
+    def agregar_logo(self,archivo,x,y):
+        imagen = tk.PhotoImage(file=archivo) #carga la imagen desde un archivo proporcianado
+        logo = tk.Label( self.ventana,image=imagen, bd=0) #crea una etiquetra para mostrar la imagen.
+        logo.image = imagen  # Necesario para mantener la referencia a la imagen y así evitar que se elimine de la memoria 
+        logo.place(x=x, y=y) #posiciona la imagen
     
-    etiqueta01=crear_etiqueta(ventana_usuario,texto="Información de pedido",fuente="Britannic Bold",tamano=28,x=40,y=30,bg="#188999")
+    def crear_etiqueta(self,texto, fuente, tamano, x, y, **kwargs): # el parámetro **kwargs permite pasar un número de variables de argumentos con nombre a una función o método (flexibilidad y prevención de errores por argumentos no esperados)
+     etiqueta = tk.Label(self.ventana, text=texto, font=(fuente, tamano), **kwargs) #crea una etiqueta con el texto y su fuente (cualquier fuente que se le quiera poner)
+     width = kwargs.get('width', None) #obtiene el ancho si se le da uno
+     height = kwargs.get('height', None) # obtiene el alto si se le da uno
     
-    agregar_logo(ventana_usuario, "Logo2.png", x=65, y=280)
+     if width and height:
+      etiqueta.place(x=x, y=y, width=width, height=height) #posiciona con ancho y alto específico
+     else:
+      etiqueta.place(x=x, y=y)
     
-    boton_salir=crear_boton(ventana_usuario,text="Cerrar sesión",font=("Arial", 10),x=840,y=8,command=lambda:cambiarVentana(ventana_usuario,ventanaPrincipal),width=100, height=25,bg="#e31414",fg="#ffffff",cursor="hand2") 
-
-    etiqueta02 =crear_etiqueta(ventana_usuario,texto="Mis pedidos",fuente="Arial",tamano=18,x=420,y=180,width=250, height=30,bg="#ffffff")
+    def crear_entry(self,x,y,width,height,mostrar=None):
+     entrada=tk.Entry(self.ventana,show=mostrar) if mostrar else tk.Entry(self.ventana) # Crea un campo de texto; si `mostrar` se especifica, oculta caracteres 
+     entrada.place(x=x,y=y,width=width,height=height)
+     return entrada # devuelve el entry para un uso posterior
  
-    etiqueta03=crear_etiqueta(ventana_usuario,texto="N° de ticket",fuente="Arial",tamano=12,x=420,y=220,bg="#188999") 
-
-    Texto_nro_ticket=crear_entry(ventana_usuario,x=420,y=245,width=250, height=30)
+    def crear_boton(self,text, font, x, y, command=None, **kwargs):
+     boton = tk.Button(self.ventana, text=text, font=font, command=command, **kwargs)
+     width = kwargs.get('width', None)
+     height = kwargs.get('height', None)
     
-    etiqueta04=crear_etiqueta(ventana_usuario,texto="N° de ticket",fuente="Arial",tamano=12,x=420,y=280,bg="#188999")
+     if width and height:
+      boton.place(x=x, y=y, width=width, height=height)
+     else:
+      boton.place(x=x, y=y)
+        
+     return boton 
  
-    Texto_nro_ticket=crear_entry(ventana_usuario,x=420,y=310, width=250, height=30)
-   
-    boton_info=crear_boton(ventana_usuario,text="Información del pedido",font=("Arial", 20),x=400,y=370,width=300, height=40,bg="#2a3ab6",fg="#ffffff")
- 
-    ventana_usuario.mainloop()
+    def crear_tabla(self,parent, columnas, datos=None, ancho_columnas=None, expandir=True):
+        
+      tabla = ttk.Treeview(parent, columns=columnas, show="headings") #crea un widget de tabla con columnas definidas
+
+      for idx, columna in enumerate(columnas):
+       tabla.heading(columna, text=columna) #asigna nombres a las columnas
+       ancho = ancho_columnas[idx] if ancho_columnas and idx < len(ancho_columnas) else 100 # establece el ancho de las columnas
+       tabla.column(columna, width=ancho, anchor="center") #configura cada columna
     
-def cambiarVentana(actual,nuevaVentana):
-    if actual:
-        actual.destroy()
-    nuevaVentana()
+      if datos:
+        for fila in datos:
+            tabla.insert("", tk.END, values=fila) #se inserta filas de datos en la tabla
 
-def ventanaPrincipal():
-    global ventana
-    ventana = tk.Tk()
-    configurar_ventana(ventana,titulo="Lavalimpia-Inicio de sesión",ancho=950, alto=550,color_fondo="#188999",icono="fondoL.ico",redimensionable=(False, False))
+      scrollbar = ttk.Scrollbar(parent, orient="vertical", command=tabla.yview) #se añade una barra de desplzamineto vertical
+      tabla.configure(yscroll=scrollbar.set)
+      scrollbar.pack(side=tk.RIGHT, fill=tk.Y) #posiciona la barra de desplazamiento
 
-    agregar_logo(ventana, "logoLavaLimpia.png", x=0, y=0)
-    agregar_logo(ventana, "Logo2.png", x=65, y=280)
+      if expandir:
+        tabla.pack(expand=True, fill=tk.BOTH) #expande la tabla para ajustarse
+      else:
+        tabla.pack()
 
-    crear_etiqueta(ventana, "Inicio de sesión", "Britannic Bold", 20, x=380, y=165,bg="#188999")
-    crear_etiqueta(ventana, "Ingrese usuario o e-mail", "Arial", 15, x=380, y=220,bg="#188999")
-    crear_etiqueta(ventana, "Ingrese contraseña:", "Arial", 15, x=380, y=275,bg="#188999")
-
-    texto_ingreso =crear_entry(ventana,x=380, y=245, width=250, height=30)
-    texto_contrasena =crear_entry(ventana,x=380, y=300, width=250, height=30,mostrar="*")
-
-    boton1=crear_boton(ventana,text="Iniciar sesión",font=("Arial", 20),x=380, y=350, width=250, height=30,command=lambda: validar_credenciales(texto_ingreso.get(), texto_contrasena.get()))
-
-    boton_olvido=crear_boton(ventana,text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: cambiarVentana(ventana,envioCo),bd=0, cursor="hand2",bg="#188999")
-
-    boton_registro =crear_boton(ventana,text="Crear cuenta de usuario",font=("Arial", 15),x=380, y=450,command=registro,cursor="hand2")
-
-    ventana.mainloop()
-
-def validar_credenciales(usuario, contrasena):
-    if not usuario or not contrasena:
-        messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
-        return
-    if usuario == "Pancracio" and contrasena == "1234":  # Ejemplo de validación
-        messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-        cambiarVentana(ventana,inicio_de_sesion)
-    else:
-        messagebox.showerror("Error", "Credenciales incorrectas. Intente nuevamente.")
-
-
-def envioCo():
-    global ventaRecu
-    ventaRecu = tk.Tk()
-    configurar_ventana(ventaRecu, titulo="Lavalimpia-Recuperacion contraseña", ancho=950, alto=550, color_fondo="#188999", icono="fondoL.ico", redimensionable=(False, False))  
-   
-    agregar_logo(ventaRecu,archivo="logoLavaLimpia.png",x=0,y =0)   
-    agregar_logo(ventaRecu,archivo="Logo2.png",x=65,y=165)      
-    
-    etiqueta1=crear_etiqueta(ventaRecu,texto="Ingrese el código",fuente="Arial",tamano=12,x=280,y=165,bg="#188999")          
-
-    Entry1=crear_entry(ventaRecu,x=280,y=190, width=250, height=30)
-
-    boton1=crear_boton(ventaRecu,text="Ingresar código",font=("Arial",20),x=545,y=190,command=lambda:cambiarVentana(ventaRecu,nuevaC),width=250, height=30)    
+      return tabla
+     
+class ventanaPrincipal(creacion_ventana): #esta clase es la tiene una herencia con cracion_ventana.
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Inicio de sesión", icono="fondoL.ico") #con super.() se puede acceder a los métodos de la clase padre desde una subclase (ventanaPrincipal)
+        self.interfaz() 
+     
+    def interfaz(self): #método donde se construye la interfaz o elementos gráficos de la ventana 
+        self.agregar_logo("logoLavaLimpia.png",x=0,y=0)
+        self.agregar_logo("Logo2.png", x=65, y=280)
+        
+        self.crear_etiqueta("Inicio de sesión", "Britannic Bold", 20, x=380, y=165,bg="#188999")
+        self.crear_etiqueta("Ingrese usuario o e-mail", "Arial", 15, x=380, y=220,bg="#188999")
+        self.crear_etiqueta("Ingrese contraseña:", "Arial", 15, x=380, y=275,bg="#188999")
+        
+        texto_ingreso =self.crear_entry(x=380, y=245, width=250, height=30) #texto ingreso usuario/e-mail
+        texto_contrasena =self.crear_entry(x=380, y=300, width=250, height=30,mostrar="*") #texto ingreso contraseña
+        
+        boton1=self.crear_boton(text="Iniciar sesión",font=("Arial", 20),x=380, y=350, width=250, height=30,command=lambda: self.validar_credenciales(texto_ingreso.get(), texto_contrasena.get())) #boton de iniciar sesión dónde se llama a un método donde se validan los datos ingresados.
+        boton_olvido=self.crear_boton(text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: self.cambiarVentana(),bd=0, cursor="hand2",bg="#188999")
+        boton_registro =self.crear_boton(text="Crear cuenta de usuario",font=("Arial", 15),x=380, y=450,command=lambda:self.cambiarVentana(ventanaRegistro),cursor="hand2") #boton que sirve para ir a la ventanad de registro
+        
+    def validar_credenciales(self,usuario, contrasena):
+        if not usuario or not contrasena:
+            messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
+            return
+        if usuario == "Pancracio" and contrasena == "1234":  # Ejemplo de validación
+            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
+            self.cambiarVentana(ventana_usuario)
+        else:
+            messagebox.showerror("Error", "Credenciales incorrectas. Intente nuevamente.")
             
-    ventaRecu.iconbitmap("fondoL.ico")
-    ventaRecu.mainloop()
-
-def nuevaC():
-    global ventaRecu2
-    ventaRecu2=tk.Tk()  
-    configurar_ventana(ventaRecu2,titulo="Lavalimpia-Recuperación contraseña",ancho=950, alto=550, color_fondo="#188999", icono="fondoL.ico", redimensionable=(False, False))     
-
-    agregar_logo(ventaRecu2,archivo="logoLavaLimpia.png",x=0,y =0)   
-    agregar_logo(ventaRecu2,archivo="Logo2.png",x=65,y=165)
-    
-    etiqueta1=crear_etiqueta(ventaRecu2,texto="Ingrese su nueva contraseña:",fuente="Arial",tamano=12,x=280,y=165,bg="#188999")            
- 
-    entry1=crear_entry(ventaRecu2,x=280,y=190, width=250, height=30)
-
-    etiqueta2=crear_etiqueta(ventaRecu2,texto="Confirme su nueva contraseña: ",fuente="Arial",tamano=12,x=280,y=225,bg="#188999")
-    etiqRecu3_2 = tk.Label(ventaRecu2, text= "Confirme su nueva contraseña:",font=("Arial", 12))
-
-    entry2=crear_entry(ventaRecu2,x=280,y=250, width=250, height=30)
-    
-    boton=crear_boton(ventaRecu2,text="Cambiar contraseña",font=("Arial",18),x=545,y=250,width=250, height=30) 
+class ventana_usuario(creacion_ventana): #ventan que se muestra  tras iniciar sesión
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Usuario", icono=None)
+        self.interfaz()
         
-    ventaRecu2.iconbitmap("fondoL.ico")
-    ventaRecu2.mainloop()
-
-
-def registro():
-    global ventana,ventRegistro
-    ventana.destroy()
-    ventRegistro=tk.Tk()
-    configurar_ventana(ventRegistro,titulo="Lavalimpia-Inicio de sesión",ancho=950, alto=550,color_fondo="#188999",icono="fondoL.ico",redimensionable=(False, False))
+    def interfaz(self):
+        self.agregar_logo("Logo2.png", x=65, y=280)
+        self.crear_etiqueta("Información de pedido",fuente="Britannic Bold",tamano=28,x=40,y=30,bg="#188999")
+        boton_salir=self.crear_boton("Cerrar sesión",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bg="#e31414",fg="#ffffff",cursor="hand2")
         
-    agregar_logo(ventRegistro, "logoLavaLimpia.png", x=0, y=0)
-    agregar_logo(ventRegistro, "Logo2.png", x=65, y=280)
+        frame_tabla=ttk.Frame(self.ventana) #se crea un contenedor frame para posicionar la tabla
+        frame_tabla.place(x=200, y=150, width=580, height=360)
+        columnas = ["ID", "Nombre", "Fecha", "Estado"]
+        datos = [
+            (1, "Orden #1", "2024-12-03", "Completada"),
+            (2, "Orden #2", "2024-12-01", "Pendiente"),
+            (3, "Orden #3", "2024-11-29", "Cancelada"),]
+        
+        self.crear_tabla( #agrega kla tabla con los datos existentes
+            parent=frame_tabla,
+            columnas=columnas,
+            datos=datos,
+            ancho_columnas=[30, 30, 30, 30],
+            expandir=True
+        )
+          
+class ventanaRegistro(creacion_ventana): # ventana para registrar a los nuevos usuarios 
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Registro", icono="fondoL.ico")
+        self.interfaz()
     
-    crear_etiqueta(ventRegistro,texto="Nuevo nombre de usuario: ",fuente="Arial", tamano=12,x=380,y=165,bg="#188999")
-    crear_etiqueta(ventRegistro,texto="Ingrese e-mail:",fuente="Arial", tamano=12,x=380,y=220,bg="#188999")
-    crear_etiqueta(ventRegistro,texto="Ingrese contraseña:",fuente="Arial", tamano=12,x=380,y=275,bg="#188999")
-    crear_etiqueta(ventRegistro,texto="Confirme su contraseña:",fuente="Arial", tamano=12,x=380,y=330,bg="#188999")
+    def interfaz(self):
+        self.agregar_logo("logoLavaLimpia.png", 0, 0)
+        self.agregar_logo("Logo2.png", 65, 280)
+        
+        self.crear_etiqueta("Nuevo nombre de usuario:", "Arial", 12, 380, 165, bg="#188999")
+        self.crear_etiqueta("Ingrese e-mail:", "Arial", 12, 380, 220, bg="#188999")
+        self.crear_etiqueta("Ingrese contraseña:", "Arial", 12, 380, 275, bg="#188999")
+        self.crear_etiqueta("Confirme su contraseña:", "Arial", 12, 380, 330, bg="#188999")
+        
+        usuario=self.crear_entry(x=380,y=190, width=250, height=30)
+        correo=self.crear_entry(x=380,y=245, width=250, height=30)
+        contrasena=self.crear_entry(x=380,y=300, width=250, height=30,mostrar="*")
+        confirmar_contrasena=self.crear_entry(x=380,y=355, width=250, height=30,mostrar="*")
+        
+        boton_crear_cuenta=self.crear_boton("Crear cuenta",font=("Arial", 20),x=380,y=410,width=250, height=30,command=lambda: self.guardarDatos(usuario.get(), correo.get(), contrasena.get(),confirmar_contrasena.get())) #boton para crear la cuenta y que llama al método guardarDatos, pasando los datos ingresados como parámetros
     
-    Text1=crear_entry(ventRegistro,x=380,y=190, width=250, height=30)
-    Text2=crear_entry(ventRegistro,x=380,y=245, width=250, height=30)
-    Text3=crear_entry(ventRegistro,x=380,y=300, width=250, height=30,mostrar="*")
-    Text4=crear_entry(ventRegistro,x=380,y=355, width=250, height=30,mostrar="*")
- 
-    registro_boton = crear_boton(ventRegistro,text="Crear cuenta",font=("Arial", 20),x=380,y=410,width=250, height=30,command=lambda: guardarDatos(Text1.get(), Text2.get(), Text3.get(),Text4.get()))
-  
-    ventRegistro.iconbitmap("fondoL.ico")
-     
-    ventRegistro.mainloop()
+    def guardarDatos(self,usuario,correo,contrasena,confirmar_contrasena): #valida los datos ingresados y los guarda si son válidos
+     if not usuario or not correo or not contrasena or not confirmar_contrasena:
+        messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
+        return  # Termina la ejecución si hay campos vacíos
 
-ventanaPrincipal()
+    # Validar usuario, correo y contraseña
+     try: # se llama a funciones externas para validar los datos.
+        usuarioValido = funciones.verificarUsuario(usuario)
+        correoValido = funciones.verificarCorreo(correo)
+        contrasenaValida = funciones.verificarContrasena(contrasena, confirmar_contrasena)
+     except ValueError as e:  # Si las funciones lanza un error se manejan de la siguiente forma
+        messagebox.showerror("Error de Validación", str(e))
+        return
+
+    # Proceder si todo es válido
+     if usuarioValido and correoValido and contrasenaValida:
+        messagebox.showinfo("Éxito", "Datos registrados correctamente.")
+        self.cambiarVentana(ventanaPrincipal)
+
+class VentanaRecuperacion(ventanaPrincipal):
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Recuperación contraseña", icono="fondoL.ico")
+        self.crear_interfaz()
+
+    def crear_interfaz(self):
+        self.agregar_logo("logoLavaLimpia.png", 0, 0)
+        self.agregar_logo("Logo2.png", 65, 280)
+        self.crear_etiqueta("Ingrese el código", "Arial", 12, 280, 165, bg="#188999")
+        codigo = self.crear_entry(280, 190, 250, 30)
+        self.crear_boton("Ingresar código", font=("Arial", 20), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaNuevaContrasena))
+
+class VentanaNuevaContrasena(ventanaPrincipal):
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Cambiar contraseña", icono="fondoL.ico")
+        self.crear_interfaz()
+
+    def crear_interfaz(self):
+        self.agregar_logo("logoLavaLimpia.png", 0, 0)
+        self.agregar_logo("Logo2.png", 65, 280)
+        self.crear_etiqueta("Ingrese su nueva contraseña:", "Arial", 12, 280, 165, bg="#188999")
+        nueva_contrasena = self.crear_entry(280, 190, 250, 30, mostrar="*")
+        self.crear_etiqueta("Confirme su nueva contraseña:", "Arial", 12, 280, 225, bg="#188999")
+        confirmar_contrasena = self.crear_entry(280, 250, 250, 30, mostrar="*")
+        self.crear_boton("Cambiar contraseña", font=("Arial", 18), x=545, y=250, width=250, height=30)
+        
+if __name__ == "__main__":
+    ventanaPrincipal().mostrarVentana()
