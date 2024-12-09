@@ -1,13 +1,19 @@
-from Interfaz.creacionVent import creacion_ventana
+from Interfaz.creacionVent import creacion_ventana 
 from tkinter import messagebox
+import tkinter as tk
 from tkinter import ttk
 from Interfaz import funciones
+ 
+ 
      
 class ventanaPrincipal(creacion_ventana): #esta clase es la tiene una herencia con cracion_ventana.
     def __init__(self):
         super().__init__(titulo="Lavalimpia-Inicio de sesión", icono="recursosImagenes/fondoL.ico") #con super.() se puede acceder a los métodos de la clase padre desde una subclase (ventanaPrincipal)
         self.interfaz() 
-     
+        
+    def VentEmergente(self):
+        self.crear_ventana_emergente("hola","Como estan muchachos")
+    
     def interfaz(self): #método donde se construye la interfaz o elementos gráficos de la ventana 
         self.agregar_logo("recursosImagenes/logoLavaLimpia.png",x=0,y=0)
         self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
@@ -20,7 +26,7 @@ class ventanaPrincipal(creacion_ventana): #esta clase es la tiene una herencia c
         texto_contrasena =self.crear_entry(x=380, y=300, width=250, height=30,mostrar="*") #texto ingreso contraseña
         
         boton1=self.crear_boton(text="Iniciar sesión",font=("Arial", 20),x=380, y=350, width=250, height=30,command=lambda: self.validar_credenciales(texto_ingreso.get(), texto_contrasena.get())) #boton de iniciar sesión dónde se llama a un método donde se validan los datos ingresados.
-        boton_olvido=self.crear_boton(text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: self.cambiarVentana(),bd=0, cursor="hand2",bg="#188999")
+        boton_olvido=self.crear_boton(text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: self.cambiarVentana(VentanaIngreseEmail),bd=0, cursor="hand2",bg="#188999")
         boton_registro =self.crear_boton(text="Crear cuenta de usuario",font=("Arial", 15),x=380, y=450,command=lambda:self.cambiarVentana(ventanaRegistro),cursor="hand2") #boton que sirve para ir a la ventanad de registro
         
     def validar_credenciales(self,usuario, contrasena):
@@ -117,6 +123,9 @@ class ventanaRegistro(creacion_ventana): # ventana para registrar a los nuevos u
         self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
         self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
         
+        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
+
+        
         self.crear_etiqueta("Nuevo nombre de usuario:", "Arial", 12, 380, 165, bg="#188999")
         self.crear_etiqueta("Ingrese e-mail:", "Arial", 12, 380, 220, bg="#188999")
         self.crear_etiqueta("Ingrese contraseña:", "Arial", 12, 380, 275, bg="#188999")
@@ -148,24 +157,42 @@ class ventanaRegistro(creacion_ventana): # ventana para registrar a los nuevos u
         messagebox.showinfo("Éxito", "Datos registrados correctamente.")
         self.cambiarVentana(ventanaPrincipal)
 
-class VentanaRecuperacion(ventanaPrincipal):
+class VentanaIngreseEmail(creacion_ventana):
     def __init__(self):
         super().__init__(titulo="Lavalimpia-Recuperación contraseña", icono="recursosImagenes/fondoL.ico")
         self.crear_interfaz()
 
     def crear_interfaz(self):
+        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
+
+        self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
+        self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
+        self.crear_etiqueta("Ingrese su email", "Arial", 12, 280, 165, bg="#188999")
+        codigo = self.crear_entry(280, 190, 250, 30)
+        self.crear_boton("Siguiente", font=("Arial", 18), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaIngresoCodigo))
+    
+class VentanaIngresoCodigo(creacion_ventana):
+    def __init__(self):
+        super().__init__(titulo="Lavalimpia-Recuperación contraseña", icono="recursosImagenes/fondoL.ico")
+        self.crear_interfaz()
+
+    def crear_interfaz(self):
+        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
+
         self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
         self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
         self.crear_etiqueta("Ingrese el código", "Arial", 12, 280, 165, bg="#188999")
         codigo = self.crear_entry(280, 190, 250, 30)
-        self.crear_boton("Ingresar código", font=("Arial", 20), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaNuevaContrasena))
+        self.crear_boton("Siguiente", font=("Arial", 18), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaNuevaContrasena))
 
-class VentanaNuevaContrasena(ventanaPrincipal):
+class VentanaNuevaContrasena(creacion_ventana):
     def __init__(self):
         super().__init__(titulo="Lavalimpia-Cambiar contraseña", icono="recursosImagenes/fondoL.ico")
         self.crear_interfaz()
 
     def crear_interfaz(self):
+        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
+
         self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
         self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
         self.crear_etiqueta("Ingrese su nueva contraseña:", "Arial", 12, 280, 165, bg="#188999")
@@ -173,4 +200,5 @@ class VentanaNuevaContrasena(ventanaPrincipal):
         self.crear_etiqueta("Confirme su nueva contraseña:", "Arial", 12, 280, 225, bg="#188999")
         confirmar_contrasena = self.crear_entry(280, 250, 250, 30, mostrar="*")
         self.crear_boton("Cambiar contraseña", font=("Arial", 18), x=545, y=250, width=250, height=30)
+        
         
