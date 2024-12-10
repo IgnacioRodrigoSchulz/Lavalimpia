@@ -1,8 +1,8 @@
-from Interfaz.creacionVent import creacion_ventana 
+from creacionVent import creacion_ventana 
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import ttk
-from Interfaz import funciones
+import funciones
  
  
      
@@ -29,24 +29,33 @@ class ventanaPrincipal(creacion_ventana): #esta clase es la tiene una herencia c
         boton_olvido=self.crear_boton(text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: self.cambiarVentana(VentanaIngreseEmail),bd=0, cursor="hand2",bg="#188999")
         boton_registro =self.crear_boton(text="Crear cuenta de usuario",font=("Arial", 15),x=380, y=450,command=lambda:self.cambiarVentana(ventanaRegistro),cursor="hand2") #boton que sirve para ir a la ventanad de registro
         
-    def validar_credenciales(self,usuario, contrasena):
-        if not usuario or not contrasena:
+    def validar_credenciales(self, identificador, contrasena):
+        if not identificador or not contrasena:
             messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
             return
-        if usuario == "gerente@lavalimpia.com" and contrasena == "admin123": 
-            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-            self.cambiarVentana(ventana_gerente)
-        elif usuario == "Pancracio" and contrasena == "1234":  # Ejemplo de validación
-            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-            self.cambiarVentana(ventana_usuario)
-        elif usuario=="operador@lavalimpia.com" and contrasena=="operador123":
-            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-            self.cambiarVentana(ventana_operador)                                
-        elif usuario=="recaudador@lavalimpia.com" and contrasena=="recaudador123":
-            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-            self.cambiarVentana(ventana_EmpleadoRecaudador)
-        else:
-            messagebox.showerror("Error", "Credenciales incorrectas. Intente nuevamente.")
+
+            # Diccionario con credenciales. Cada entrada tiene correo y usuario como posibles identificadores.
+        credenciales = {
+            "gerente": {"correo": "gerente@lavalimpia.com", "contrasena": "admin123", "ventana": ventana_gerente},
+            "Pancracio": {"correo": "pancracio@gmail.com", "contrasena": "1234", "ventana": ventana_usuario},
+            "operador": {"correo": "operador@lavalimpia.com", "contrasena": "operador123", "ventana": ventana_operador},
+            "recaudador": {"correo": "recaudador@lavalimpia.com", "contrasena": "recaudador123", "ventana": ventana_EmpleadoRecaudador}
+            }
+
+            # Verificar si el identificador coincide con un usuario o correo
+        for usuario, datos in credenciales.items(): #.items sirve para recorrer el diccionario y así poder acceder a los datos
+            if identificador == usuario or identificador == datos["correo"]: # datos[] comprueba si es correspondiente a lo guardado en el diccionario
+                # Si el identificador coincide, validamos la contraseña
+                if datos["contrasena"] == contrasena:
+                    messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
+                    self.cambiarVentana(datos["ventana"])
+                    return
+                else:
+                    messagebox.showerror("Error", "Contraseña incorrecta. Intente nuevamente.")
+                    return
+        messagebox.showerror("Error", "Usuario no encontrado. Intente nuevamente.")
+
+
             
 class ventana_usuario(creacion_ventana): #ventan que se muestra  tras iniciar sesión
     def __init__(self):
@@ -57,20 +66,19 @@ class ventana_usuario(creacion_ventana): #ventan que se muestra  tras iniciar se
         self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
         self.crear_etiqueta("Información de pedido",fuente="Britannic Bold",tamano=28,x=40,y=30,bg="#188999")
         boton_salir=self.crear_boton("Cerrar sesión",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bg="#e31414",fg="#ffffff",cursor="hand2")
-        
+    
         frame_tabla=ttk.Frame(self.ventana) #se crea un contenedor frame para posicionar la tabla
-        frame_tabla.place(x=200, y=150, width=580, height=360)
-        columnas = ["ID", "Nombre", "Fecha", "Estado"]
+        frame_tabla.place(x=280, y=150, width=550, height=150)
+        columnas = ["N° de ticket", "Nombre","Fecha", "Prenda", "Estado"]
         datos = [
-            (1, "Orden #1", "2024-12-03", "Completada"),
-            (2, "Orden #2", "2024-12-01", "Pendiente"),
-            (3, "Orden #3", "2024-11-29", "Cancelada"),]
+            (1, "Pancracio" ,"10-12-2024","Polera", "Pendiente"),
+            ]
         
         self.crear_tabla( #agrega kla tabla con los datos existentes
             parent=frame_tabla,
             columnas=columnas,
             datos=datos,
-            ancho_columnas=[30, 30, 30, 30],
+            ancho_columnas=[],
             expandir=True
         )
 
@@ -201,4 +209,4 @@ class VentanaNuevaContrasena(creacion_ventana):
         confirmar_contrasena = self.crear_entry(280, 250, 250, 30, mostrar="*")
         self.crear_boton("Cambiar contraseña", font=("Arial", 18), x=545, y=250, width=250, height=30)
         
-        
+print("Hola mundo")
