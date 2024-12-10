@@ -1,4 +1,4 @@
-import re 
+import re #para definir patrones específicos mediante expresiones regulares
 from tkinter import messagebox
 
 
@@ -21,14 +21,11 @@ def verificarUsuario(usuario):
     if len(usuario) < 4 or len(usuario) > 20:
         messagebox.showwarning("Advertencia", "El nombre de usuario debe tener entre 4 y 20 caracteres.")
         return False
-    if not re.match(r'^[a-zA-Z0-9_.]+$', usuario):
+    if not re.match(r'^[a-zA-Z0-9_.]+$', usuario):  # re.match se usa para verificar si el texto completo coincide con un patrón.
         messagebox.showwarning("Advertencia", "El nombre de usuario solo puede contener letras, números, guiones bajos (_) y puntos (.).")
         return False
     if usuario.startswith(('.', '_')) or usuario.endswith(('.', '_')):
         messagebox.showwarning("Advertencia", "El nombre de usuario no puede comenzar ni terminar con un punto o guion bajo.")
-        return False
-    if re.search(r'[._]{2,}', usuario):
-        messagebox.showwarning("Advertencia", "El nombre de usuario no debe tener puntos o guiones bajos consecutivos.")
         return False
     return True
 
@@ -55,7 +52,7 @@ def verificarContrasena(contrasena, confirmar_contrasena):
     Criterios:
     - Coincide con la contraseña de confirmación.
     - Al menos 8 caracteres.
-    - Incluye al menos una letra mayúscula, una minúscula, un número y un carácter especial.
+    - Incluye al menos un número y un carácter especial.
 
     Args:
         contrasena (str): La contraseña a verificar.
@@ -70,25 +67,10 @@ def verificarContrasena(contrasena, confirmar_contrasena):
     if len(contrasena) < 8:
         messagebox.showwarning("Advertencia","La contraseña debe tener al menos 8 caracteres.")
         return False
-    if not re.search(r'[A-Z]', contrasena):
-        messagebox.showwarning("Advertencia","La contraseña debe incluir al menos una letra mayúscula.")
-        return False
-    if not re.search(r'[a-z]', contrasena):
-        messagebox.showwarning("Advertencia","La contraseña debe incluir al menos una letra minúscula.")
-        return False
     if not re.search(r'[0-9]', contrasena):
         messagebox.showwarning("Advertencia","La contraseña debe incluir al menos un número.")
         return False
-    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', contrasena):
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', contrasena): #re.search Se usa para buscar si hay al menos una coincidencia de un patrón en el texto.
         messagebox.showwarning("Advertencia","La contraseña debe incluir al menos un carácter especial (!@#$%^&*(),.?\":{}|<>).")
         return False
     return True
-
-
-
-
-usuario = "usuario.ejemplo_123"
-correo = "ejemplo@dominio.com"
-contrasena = "Contraseña123!"
-confirmar_contrasena = "Contraseña123!"
-
