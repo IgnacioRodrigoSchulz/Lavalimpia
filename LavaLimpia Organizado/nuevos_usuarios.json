@@ -1,0 +1,32 @@
+[
+    {
+        "usuario": "Marco_1",
+        "correo": "proyecto.poo022@gmail.com",
+        "contrasena": "Marco#andres1"
+    },
+    {
+        "usuario": "Marco_2",
+        "correo": "Marco@gmail.com",
+        "contrasena": "Marco1#A"
+    },
+    {
+        "usuario": "Pancracio_01",
+        "correo": "pancracio@gmail.com",
+        "contrasena": "Pancracio1#"
+    },
+    {
+        "gerente":"User_gerente",
+        "correo":"gerente@lavalimpia.com",
+        "contrasena":"admin1234"
+    },
+    {
+        "operador": "User_operador",
+        "correo": "operador@lavalimpia.com",
+        "contrasena": "operador5678"
+    },
+    {
+        "recaudador": "User_recaudador",
+        "correo": "recaudador@lavalimpia.com",
+        "contrasena": "recaudador9876"
+    }
+]
