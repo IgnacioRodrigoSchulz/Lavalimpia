@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
 
 class creacion_ventana: #Esta clase es el origen de todas las otras ventanas de la aplicación, donde se establecen configuraciones en común
     def __init__(self,titulo, ancho=950, alto=550, color_fondo="#188999", icono=None, redimensionable=(False, False)): #__init__ es el método se llama automáticamente cuando se crea un objeto de una clase. (inicializa los atributos deacuerdo al objeto)
@@ -74,4 +75,46 @@ class creacion_ventana: #Esta clase es el origen de todas las otras ventanas de 
         tabla.pack()
 
       return tabla
-     
+    
+    def crear_ventana_emergente(self, titulo, mensaje, ancho=600, alto=400, color_fondo="#f0f0f0"):
+      # Crear una nueva ventana emergente
+      ventana_terminos = tk.Toplevel(self.ventana)
+      ventana_terminos.title(titulo)
+      ventana_terminos.geometry(f"{ancho}x{alto}")
+      ventana_terminos.configure(bg=color_fondo)
+      ventana_terminos.transient(self.ventana)  # Mantenerlo sobre la ventana principal
+      ventana_terminos.grab_set()  # Bloquear interacción con la ventana principal
+
+      # Crear el widget ScrolledText
+      texto_terminos = ScrolledText(
+          ventana_terminos,
+          wrap="word",
+          width=60,
+          height=15,
+          font=("Arial", 12),
+          bg=color_fondo
+            )
+      texto_terminos.insert("1.0", mensaje)  # Insertar el texto de los términos
+      texto_terminos.configure(state="disabled")  # Hacer que sea solo lectura
+      texto_terminos.place(x=10, y=10)  # Ubicar el widget en la ventana
+
+        # Botón para cerrar la ventana
+      cerrar_btn = tk.Button(
+        ventana_terminos,
+        text="Cerrar",
+        command=ventana_terminos.destroy,
+        font=("Arial", 12),
+        bg="#188999",
+        fg="white",
+        relief="flat",
+        cursor="hand2"
+         )
+      cerrar_btn.place(x=(ancho // 2) - 40, y=alto - 50)  # Centrar el botón en la parte inferior
+        
+    def crear_checkbox(self, texto, variable, x, y, command=None):
+        """Crea un checkbox en la ventana."""
+        checkbox = tk.Checkbutton(
+            self.ventana, text=texto, variable=variable, bg="#188999", command=command
+        )
+        checkbox.place(x=x, y=y)
+        return checkbox
