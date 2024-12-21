@@ -1,0 +1,16 @@
+[
+    {
+        "usuario": "Pancracio_01",
+        "pedidos": [
+            {
+                "Fecha creación": "2024-12-20 22:13:18",
+                "Fecha entrega": "22-12-2024",
+                "Usuario": "Pancracio_01",
+                "Dirección": "Platano #1245",
+                "Tarifa pedido": 5000.0,
+                "Código único": "e1VFAcfN",
+                "Estado": "Recepcionado"
+            }
+        ]
+    }
+]
