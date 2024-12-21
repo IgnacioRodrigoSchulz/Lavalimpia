@@ -5,9 +5,9 @@
         "contrasena": "Pancracio1#"
     },
     {
-        "gerente":"User_gerente",
-        "correo":"gerente@lavalimpia.com",
-        "contrasena":"admin1234"
+        "gerente": "User_gerente",
+        "correo": "gerente@lavalimpia.com",
+        "contrasena": "admin1234"
     },
     {
         "operador": "User_operador",
@@ -18,5 +18,25 @@
         "recaudador": "User_recaudador",
         "correo": "recaudador@lavalimpia.com",
         "contrasena": "recaudador9876"
+    },
+    {
+        "usuario": "Vicente_18XD",
+        "correo": "vicenteH@gmail.com",
+        "contrasena": "Vicente#1"
+    },
+    {
+        "usuario": "Fabian_C",
+        "correo": "FabianAC@gmail.com",
+        "contrasena": "Fabian#1"
+    },
+    {
+        "usuario": "Ignacio_SC",
+        "correo": "IgnacioR@gmail.com",
+        "contrasena": "Ignacio#1"
+    },
+    {
+        "usuario": "Cristobal_h",
+        "correo": "CristobalH@gmail.com",
+        "contrasena": "Cristobal#1"
     }
 ]
