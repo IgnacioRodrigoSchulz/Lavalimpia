@@ -1,136 +1,181 @@
 from Interfaz.creacionVent import creacion_ventana 
 import tkinter as tk
-from tkinter import messagebox,ttk
+from tkinter import messagebox
 from Interfaz import funciones
-import json
-import random,smtplib,string
+import json,random,string
+from datetime import datetime,timedelta
 
-      
-class ventanaPrincipal(creacion_ventana): #esta clase es la tiene una herencia con cracion_ventana.
+#ventana inicial de inicio se sesión y creacion de cuenta
+class ventanaPrincipal(creacion_ventana):
     def __init__(self):
-        super().__init__(titulo="Lavalimpia-Inicio de sesión", icono="recursosImagenes/fondoL.ico") #con super.() se puede acceder a los métodos de la clase padre desde una subclase (ventanaPrincipal)
-        self.interfaz() 
-        
-    def VentEmergente(self):
-        self.crear_ventana_emergente("hola","Como estan muchachos")
-    
-    def interfaz(self): #método donde se construye la interfaz o elementos gráficos de la ventana 
-        self.agregar_logo("recursosImagenes/logoLavaLimpia.png",x=0,y=0)
-        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
-        
-        self.crear_etiqueta("Inicio de sesión", "Britannic Bold", 20, x=380, y=165,bg="#188999")
-        self.crear_etiqueta("Ingrese usuario o e-mail", "Arial", 15, x=380, y=220,bg="#188999")
-        self.crear_etiqueta("Ingrese contraseña:", "Arial", 15, x=380, y=275,bg="#188999")
-        
-        texto_ingreso =self.crear_entry(x=380, y=245, width=250, height=30) #texto ingreso usuario/e-mail
-        texto_contrasena =self.crear_entry(x=380, y=300, width=250, height=30,mostrar="*") #texto ingreso contraseña
-        
-        boton1=self.crear_boton(text="Iniciar sesión",font=("Arial", 20),x=380, y=350, width=250, height=30,command=lambda: self.validar_credenciales(texto_ingreso.get(), texto_contrasena.get())) #boton de iniciar sesión dónde se llama a un método donde se validan los datos ingresados.
-        boton_olvido=self.crear_boton(text="¿Olvidó su contraseña?", font=("Arial", 10),x=380, y=420,command=lambda: self.cambiarVentana(VentanaIngreseEmail),bd=0, cursor="hand2",bg="#188999")
-        boton_registro =self.crear_boton(text="Crear cuenta de usuario",font=("Arial", 15),x=380, y=450,command=lambda:self.cambiarVentana(ventanaRegistro),cursor="hand2") #boton que sirve para ir a la ventanad de registro
-        
-    def validar_credenciales(self, usuario, contrasena):
-        archivo="nuevos_usuarios.json"
-        
-        try:
-            with open(archivo, "r") as file:
-                usuarios=json.load(file)
-        except(FileNotFoundError,json.JSONDecodeError):
-            messagebox.showerror("Error","No hay ususarios registrasdos")
-            return False
-        
-        usuarioEncontrado=False
-        for user in usuarios:
-            for tipoUsuario,nombreUsuario in user.items():
-                if tipoUsuario in ["correo ","contrasena"]:
-                    continue
-                if (nombreUsuario==usuario or user["correo"]==usuario) and user["contrasena"]==contrasena:
-                    usuarioEncontrado=True
-                    messagebox.showinfo("Bienvenido",f"{nombreUsuario}!")
-                    
-                    
-                    if tipoUsuario=="gerente":
-                        self.cambiarVentana(ventana_gerente)
-                    elif tipoUsuario=="operador":
-                        self.cambiarVentana(ventana_operador)
-                    elif tipoUsuario=="recaudador":
-                        self.cambiarVentana(ventana_EmpleadoRecaudador)
-                    elif tipoUsuario=="usuario":
-                        self.cambiarVentana(ventana_usuario)
-                    else:
-                        messagebox.showerror("Error","Tipo de usuario desconocido")
-                    return True
-        if not usuarioEncontrado:
-            messagebox.showerror("Error","El ususario o contraseña son incorrectos")        
-        return False
-            
-class ventana_usuario(creacion_ventana): #ventan que se muestra  tras iniciar sesión
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Usuario", icono="recursosImagenes/fondoL.ico")
+        super().__init__(titulo="Lavalimpia-Inicio de sesión", icono="recursosImagenes/fondoL.ico")
+        self.usuario_actual = None  # Usuario autenticado
         self.interfaz()
-        
+
     def interfaz(self):
+        self.agregar_logo("recursosImagenes/logoLavaLimpia.png", x=0, y=0)
         self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
-        self.crear_etiqueta("Información de pedido",fuente="Britannic Bold",tamano=28,x=40,y=30,bg="#188999")
-        boton_salir=self.crear_boton("Cerrar sesión",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bg="#e31414",fg="#ffffff",cursor="hand2")
-    
-        frame_tabla=ttk.Frame(self.ventana) #se crea un contenedor frame para posicionar la tabla
-        frame_tabla.place(x=280, y=150, width=550, height=150)
-        columnas = ["N° de ticket", "Nombre","Fecha", "Prenda", "Estado"]
-        datos = [
-            (1, "Pancracio" ,"10-12-2024","Polera", "Pendiente"),
-            ]
-        
-        self.crear_tabla( #agrega kla tabla con los datos existentes
-            parent=frame_tabla,
-            columnas=columnas,
-            datos=datos,
-            ancho_columnas=[],
-            expandir=True
+
+        self.crear_etiqueta("Inicio de sesión", "Britannic Bold", 20, x=380, y=165, bg="#188999")
+        self.crear_etiqueta("Ingrese usuario o e-mail", "Arial", 15, x=380, y=220, bg="#188999")
+        self.crear_etiqueta("Ingrese contraseña:", "Arial", 15, x=380, y=275, bg="#188999")
+
+        texto_ingreso = self.crear_entry(x=380, y=245, width=250, height=30)  # Usuario o email
+        texto_contrasena = self.crear_entry(x=380, y=300, width=250, height=30, mostrar="*")  # Contraseña
+
+        # Botón iniciar sesión
+        self.crear_boton(
+            text="Iniciar sesión",
+            font=("Arial", 20),
+            x=380,
+            y=350,
+            width=250,
+            height=30,
+            command=lambda: self.validar_credenciales(texto_ingreso.get().strip(), texto_contrasena.get().strip())
         )
 
-class ventana_gerente(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Gerente", icono="recursosImagenes/fondoL.ico")
+        # Botón registro
+        self.crear_boton(
+            text="Crear cuenta de usuario",
+            font=("Arial", 15),
+            x=380,
+            y=450,
+            command=lambda: self.cambiarVentana(ventanaRegistro),  # Suponiendo que la ventanaRegistro está implementada
+            cursor="hand2"
+        )
+
+    def validar_credenciales(self, usuario, contrasena):
+        archivo_usuarios = "nuevos_usuarios.json"
+
+        if not usuario or not contrasena:
+            messagebox.showerror("Error", "Por favor, complete todos los campos.")
+            return False
+
+        try:
+            with open(archivo_usuarios, "r") as file:
+                usuarios = json.load(file)
+        except FileNotFoundError:
+            messagebox.showerror("Error", "El archivo de usuarios no fue encontrado.")
+            return False
+        except json.JSONDecodeError:
+            messagebox.showerror("Error", "El archivo de usuarios tiene un formato incorrecto.")
+            return False
+
+        for user in usuarios:
+            # Comprobar si es usuario regular o un tipo especial (gerente, operador, etc.)
+            tipo_usuario = next((key for key in user if key not in ["correo", "contrasena"]), None)
+
+            if (
+                (user.get(tipo_usuario) == usuario or user.get("correo") == usuario)
+                and user.get("contrasena") == contrasena
+            ):
+                self.usuario_actual = user
+                messagebox.showinfo("Bienvenido", f"¡Hola, {user[tipo_usuario]}!")
+                
+                if tipo_usuario == "usuario":
+                    self.cambiarVentana(lambda usuario_actual: ventana_usuario(usuario_actual))
+                elif tipo_usuario == "gerente":
+                    self.cambiarVentana(lambda usuario_actual:ventana_gerente(usuario_actual))  # Asumiendo que esta clase está implementada
+                elif tipo_usuario == "operador":
+                    self.cambiarVentana(lambda usuario_actual:ventana_operador(usuario_actual))
+                elif tipo_usuario == "recaudador":
+                    self.cambiarVentana(lambda usuario_actual:ventana_EmpleadoRecaudador(usuario_actual))
+                else:
+                    messagebox.showerror("Error", "Tipo de usuario desconocido.")
+                return True
+
+        messagebox.showerror("Error", "El usuario o la contraseña son incorrectos.")
+        return False
+
+#ventana de usuario especificado en la ventana inicial
+class ventana_usuario(creacion_ventana):  # Ventana para usuarios regulares
+    def __init__(self, usuario):
+        super().__init__(titulo="Lavalimpia-Usuario", icono="recursosImagenes/fondoL.ico")
+        self.usuario = usuario  # Usuario autenticado
+        self.pedidos_usuario = []
         self.interfaz()
-    
+
     def interfaz(self):
         self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
-        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
-        self.crear_boton(text="Buscador de pedidos",font=("Arial",18),x=150,y=200,width=300,height=50,bg="blue",fg="#ffffff")
-        self.crear_boton(text="Buscador de usuarios",font=("Arial",18),x=150,y=300,width=300,height=50,bg="blue",fg="#ffffff")
-        self.crear_boton(text="Datos y estadísticas",font=("Arial",18),x=500,y=200,width=300,height=50,bg="blue",fg="#ffffff")
-        self.crear_boton(text="Crear pedido",font=("Arial",18),x=500,y=300,width=300,height=50,bg="blue",fg="#ffffff")
+        self.crear_etiqueta(f"¡Bienvenido, {self.usuario['usuario']}!",fuente="Britannic Bold",tamano=28,x=40,y=30,bg="#188999")
 
-class ventana_operador(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Operador",icono="recursosImagenes/fondoL.ico")
-        self.interfaz()
-    
-    def interfaz(self):
-        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
-        self.crear_etiqueta(texto="Creador de pedidos", fuente= ("Britannic Bold"),tamano=28,x=40,y=30,bg="#188999")
-        self.crear_etiqueta(texto="Usuario",fuente=("Arial"),tamano=12,x=120,y=120,bg="#188999",fg="#ffffff")
-        self.crear_entry(x=120,y=150, width=280, height=30)
-        self.crear_etiqueta(texto= "Dirección",fuente=("Arial"),tamano=12,x=120,y=190,bg="#188999",fg="#ffffff")
-        self.crear_entry(x=120,y=220, width=280, height=30)
-        self.crear_etiqueta(texto= "Tarifa",fuente=("Arial"),tamano=12,x=120,y=260,bg="#188999",fg="#ffffff")
-        self.crear_entry(x=120,y=290, width=280, height=30)
-        self.crear_boton(text="Crear pedido",font=("Arial", 20),x=360,y=410,command=None,width=260, height=40,bg="#2a3ab6",fg="#ffffff")
+        # Botón para cerrar sesión
+        self.crear_boton("Cerrar sesión", font=("Arial", 10),x=840,y=8,command=lambda: self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg="#e31414", fg="#ffffff", cursor="hand2")
 
-class  ventana_EmpleadoRecaudador(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Recaudador",icono="recursosImagenes/fondoL.ico")
-        self.interfaz()
-    
-    def interfaz(self):
-        self.agregar_logo("recursosImagenes/logoLavaLimpia.png",x=0,y=0)
-        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
-        self.crear_etiqueta(texto="Total a pagar:", fuente=("Arial"),tamano=22,x=380, y=165,bg="#188999",fg="White")
-        self.crear_entry(x=380, y=245, width=250, height=30)
-        self.crear_boton(text="Confirmar pago",font=("Arial",12),x=380, y=350,width=200, height=50)
-        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
+        # Botón para cargar pedidos
+        self.crear_etiqueta("Para ver tus códigos únicos asociados a tu cuenta cliquea aquí:",fuente="Arial",tamano=15,x=40,y=100,bg="#188999")
+        self.boton_pedidos = self.crear_boton(text="Códigos",font=("Arial", 18),x=40,y=150,command=self.cargar_pedidos,width=100,height=25)
         
+        self.crear_etiqueta("Para saber el estado de su pedido cliquea Aquí he ingrese el código único de su pedido:",fuente="Arial",tamano=15,x=40,y=200,bg="#188999")
+        self.botonEstado=self.crear_boton(text="Estado",font=("Arial",18),x=40,y=250,command=self.ver_estado_pedido,width=100,height=25)
+    
+    def cargar_pedidos(self):
+        """
+        Busca y muestra los pedidos asociados al usuario actual.
+        """
+        archivo_pedidos = "pedidos.json"
+
+        try:
+            # Leer el archivo JSON
+            with open(archivo_pedidos, 'r', encoding='utf-8') as file:
+                datos = json.load(file)
+
+            # Filtrar los pedidos del usuario actual
+            self.pedidos_usuario = next((user["pedidos"] for user in datos if user.get("usuario") == self.usuario["usuario"]),[])
+
+            if self.pedidos_usuario:
+                
+                    self.ventanaE_InfoCodUnico(titulo=f"Pedido del usuario",pedidos=self.pedidos_usuario,ancho=850,alto=350,color_fondo="#e6f7ff")
+            else:
+                messagebox.showinfo("Pedidos del usurio","No tienes pedidos registrados.")
+
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"El archivo {archivo_pedidos} no fue encontrado.")
+        except json.JSONDecodeError:
+            messagebox.showerror("Error", "no existe código único, debe realizar un pedido")
+    
+    def ver_estado_pedido(self):
+        """
+        Abre una ventana para ingresar el código único y mostrar detalles del pedido.
+        """
+        ventana_estado = tk.Toplevel(self.ventana)
+        ventana_estado.title("Estado del Pedido")
+        ventana_estado.geometry("400x300")
+        ventana_estado.transient(self.ventana)
+        ventana_estado.grab_set()
+
+        tk.Label(ventana_estado, text="Ingrese el código único del pedido:", font=("Arial", 12)).pack(pady=10)
+        entry_codigo = tk.Entry(ventana_estado, font=("Arial", 12))
+        entry_codigo.pack(pady=5)
+
+        # Etiquetas para mostrar información del pedido
+        label_estado = tk.Label(ventana_estado, text="Estado: ", font=("Arial", 10))
+        label_estado.pack(pady=5)
+        label_fecha_entrega = tk.Label(ventana_estado, text="Fecha de Entrega: ", font=("Arial", 10))
+        label_fecha_entrega.pack(pady=5)
+        label_direccion = tk.Label(ventana_estado, text="Dirección: ", font=("Arial", 10))
+        label_direccion.pack(pady=5)
+        label_tarifa = tk.Label(ventana_estado, text="Tarifa: ", font=("Arial", 10))
+        label_tarifa.pack(pady=5)
+
+        def buscar_estado():
+            codigo = entry_codigo.get()
+            pedido = next((p for p in self.pedidos_usuario if p.get('Código único') == codigo), None)
+            if pedido:
+                label_estado.config(text=f"Estado: {pedido.get('Estado', 'Desconocido')}")
+                label_fecha_entrega.config(text=f"Fecha de Entrega: {pedido.get('Fecha entrega', 'Desconocida')}")
+                label_direccion.config(text=f"Dirección: {pedido.get('Dirección', 'Desconocida')}")
+                label_tarifa.config(text=f"Tarifa: {pedido.get('Tarifa pedido', 'Desconocida')} CLP")
+            else:
+                label_estado.config(text="Código no encontrado")
+                label_fecha_entrega.config(text="")
+                label_direccion.config(text="")
+                label_tarifa.config(text="")
+
+        tk.Button(ventana_estado, text="Buscar", command=buscar_estado).pack(pady=10)
+#Terminada pero con posibles modificaciones.
+
+#Esta es la ventana de registro, la cual sirve para cear cuentas en LavaLimpia
 class ventanaRegistro(creacion_ventana): # ventana para registrar a los nuevos usuarios 
     def __init__(self):
         super().__init__(titulo="Lavalimpia-Registro", icono="recursosImagenes/fondoL.ico")
@@ -248,68 +293,248 @@ class ventanaRegistro(creacion_ventana): # ventana para registrar a los nuevos u
             alto=400,
             color_fondo="#ffffff"
                 )
-        
-class VentanaIngreseEmail(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Recuperación contraseña", icono="recursosImagenes/fondoL.ico")
-        self.crear_interfaz()
+#cierre de esta ventana.
 
-    def crear_interfaz(self):
-        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
-
-        self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
-        self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
-        self.crear_etiqueta("Ingrese su email", "Arial", 12, 280, 165, bg="#188999")
-        codigo = self.crear_entry(280, 190, 250, 30)
-        self.crear_boton("Siguiente", font=("Arial", 18), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaIngresoCodigo))
-    """""""""    
-    def generar_codigo(self):
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+#En proceso
+#Esta es la ventana del gerente.
+class ventana_gerente(creacion_ventana):
+    def __init__(self,usuario_actual):
+        super().__init__(titulo="Lavalimpia-Gerente", icono="recursosImagenes/fondoL.ico")
+        self.interfaz()
+        self.usuario_actual=usuario_actual
     
-    def enviar_correo(self):
+    def interfaz(self):
+        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
+        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
+        self.crear_boton(text="Buscador de pedidos",font=("Arial",18),x=150,y=200,width=300,height=50,bg="blue",fg="#ffffff")
+        self.crear_boton(text="Buscador de usuarios",font=("Arial",18),x=150,y=300,width=300,height=50,bg="blue",fg="#ffffff")
+        self.crear_boton(text="Datos y estadísticas",font=("Arial",18),x=500,y=200,width=300,height=50,bg="blue",fg="#ffffff")
+        self.crear_boton(text="Crear pedido",font=("Arial",18),x=500,y=300,width=300,height=50,bg="blue",fg="#ffffff")
+#cierre de esa ventana.
+
+###medianamente listo
+#ventana del operador #terminado medianamente Hay que corregir cosas básicas
+class ventana_operador(creacion_ventana):
+    def __init__(self,usuario_actual):
+        super().__init__(titulo="Lavalimpia-Operador",icono="recursosImagenes/fondoL.ico")
+        self.interfaz()
+        self.usuario_actual = usuario_actual
+    def interfaz(self):
+        self.agregar_logo("recursosImagenes/logoLavaLimpia.png",x=0,y=0)
+        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
+        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
+        
+        self.crear_boton(text="Ingresar pedido",font=("Arial",20),x=150,y=250,command=lambda:self.cambiarVentana(IngresoPedido_operador),width=260, height=40)
+        self.crear_boton(text="Consultar pedido",font=("Arial",20),x=450,y=250,command=lambda:self.cambiarVentana(ConsultaPedido_operador),width=260, height=40)
+        
+class IngresoPedido_operador(creacion_ventana):
+    def __init__(self,usuario_actual):
+        super().__init__(titulo="Lavalimpia-Operador (Ingreso de pedido)", icono="recursosImagenes/fondoL.ico")
+        self.interfaz()
+        self.usuario_actual = usuario_actual
+    def interfaz(self):
+        self.crear_etiqueta(texto="Creador de pedidos", fuente=("Britannic Bold"), tamano=28, x=40, y=30, bg="#188999")
+        self.crear_boton("Volver",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventana_operador),width=100, height=25,bd=0, cursor="hand2",bg="white")
+        self.crear_etiqueta(texto="Usuario", fuente=("Arial"), tamano=12, x=120, y=120, bg="#188999", fg="#ffffff")
+        self.entry_usuario = self.crear_entry(x=120, y=150, width=280, height=30)
+        
+        self.crear_etiqueta(texto="Dirección", fuente=("Arial"), tamano=12, x=120, y=190, bg="#188999", fg="#ffffff")
+        self.entry_direccion = self.crear_entry(x=120, y=220, width=280, height=30)
+        
+        self.crear_etiqueta(texto="Tarifa", fuente=("Arial"), tamano=12, x=120, y=260, bg="#188999", fg="#ffffff")
+        self.entry_tarifa = self.crear_entry(x=120, y=290, width=280, height=30)
+        
+        
+        self.crear_boton(
+            text="Crear pedido",
+            font=("Arial", 20),
+            x=360, y=410,
+            command=self.guardar_pedido,
+            width=260, height=40
+        )
+        
+    def guardar_pedido(self):
+        # Obtener la fecha y hora actual
+        fecha_actual = datetime.now()
+        fecha_creacion = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
+    
+        # Calcular la fecha de entrega sumando 2 días
+        fecha_entrega = (fecha_actual + timedelta(days=2)).strftime("%d-%m-%Y")
+    
+        # Obtener los datos de los campos de entrada
+        usuario = self.entry_usuario.get().strip()
+        direccion = self.entry_direccion.get().strip()
+        tarifa = self.entry_tarifa.get().strip()
+
+        # Validaciones
+        if not usuario:
+            messagebox.showwarning("Campo vacío", "El campo 'Usuario' no puede estar vacío.")
+            return
+        if not direccion:
+            messagebox.showwarning("Campo vacío", "El campo 'Dirección' no puede estar vacío.")
+            return
+        if not tarifa:
+            messagebox.showwarning("Campo vacío", "El campo 'Tarifa' no puede estar vacío.")
+            return
+
+        # Validar que la tarifa sea numérica
         try:
-            with open('nuevos_usuarios.json','r') as file:
-                data=json.load(file)
-                destinatario=data['correo']
-        except Exception as e:
-            messagebox.showerror("Error",f"no se pudo leer el archivo json:{e}")
+            tarifa_float = float(tarifa)
+            if tarifa_float<=0:
+                messagebox.showwarning("Valor inválido","La tarifa debe ser un valor numérico positivo.")
+                return
+        except ValueError:
+            messagebox.showwarning("Formato incorrecto","La tarifa debe ser un valor numérico válido.")
+            return
+
+        try:
+            with open("nuevos_usuarios.json", "r", encoding="utf-8") as archivo_usuarios:
+                usuarios = json.load(archivo_usuarios)
+        except (FileNotFoundError, json.JSONDecodeError):
+                messagebox.showerror("Error", "No se encontró el archivo de usuarios o está vacío.")
+                return
+        
+        # Comprobar si el usuario existe en la lista
+        usuario_existente = any(u.get("usuario") == usuario for u in usuarios)
+        if not usuario_existente:
+            messagebox.showwarning("Usuario no encontrado", "El usuario ingresado no está registrado.")
             return
         
-        remitente=
+        codigo_unico = self.generar_CodigoUnico()
+        estado_inicial="Recepcionado"
+        # Crear un diccionario con los datos
+        datos_pedido = {
+            "Fecha creación": fecha_creacion,
+            "Fecha entrega": fecha_entrega,
+            "Usuario": usuario,
+            "Dirección": direccion,
+            "Tarifa pedido": tarifa_float,
+            "Código único": codigo_unico,
+            "Estado":estado_inicial
+            }
+
+        # Leer el contenido existente del archivo JSON si existe
         try:
-            with smtplib.SMTP('smtp.gmail.com',587) as server:
-                server.starttls()
-                server.login(remitente,contrasena)
-        """""""""""""""
-    
-class VentanaIngresoCodigo(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Recuperación contraseña", icono="recursosImagenes/fondoL.ico")
-        self.crear_interfaz()
+            with open("pedidos.json", "r", encoding="utf-8") as archivo_pedidos:
+                pedidos = json.load(archivo_pedidos)
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Si el archivo no existe o está vacío, inicializar una lista
+            pedidos = []
 
-    def crear_interfaz(self):
-        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
+        for entrada in pedidos:
+            if entrada["usuario"]==usuario:
+                entrada["pedidos"].append(datos_pedido)
+                break
+        else:
+            # Agregar el nuevo pedido a la lista
+            pedidos.append({
+                "usuario":usuario,
+                "pedidos":[datos_pedido]
+            })
+        # Escribir los datos actualizados en el archivo JSON
+        with open("pedidos.json", "w", encoding="utf-8") as archivo:
+            json.dump(pedidos, archivo, indent=4, ensure_ascii=False)
 
-        self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
-        self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
-        self.crear_etiqueta("Ingrese el código", "Arial", 12, 280, 165, bg="#188999")
-        codigo = self.crear_entry(280, 190, 250, 30)
-        self.crear_boton("Siguiente", font=("Arial", 18), x=545, y=190, width=250, height=30,command=lambda: self.cambiarVentana(VentanaNuevaContrasena))
+        messagebox.showinfo("Éxito", "Pedido guardado exitosamente.")
 
-class VentanaNuevaContrasena(creacion_ventana):
-    def __init__(self):
-        super().__init__(titulo="Lavalimpia-Cambiar contraseña", icono="recursosImagenes/fondoL.ico")
-        self.crear_interfaz()
-
-    def crear_interfaz(self):
-        boton_salir=self.crear_boton("Volver al inicio",font=("Arial", 10),x=840,y=8,command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25,bd=0, cursor="hand2",bg="#188999")
-
-        self.agregar_logo("recursosImagenes/logoLavaLimpia.png", 0, 0)
-        self.agregar_logo("recursosImagenes/Logo2.png", 65, 280)
-        self.crear_etiqueta("Ingrese su nueva contraseña:", "Arial", 12, 280, 165, bg="#188999")
-        nueva_contrasena = self.crear_entry(280, 190, 250, 30, mostrar="*")
-        self.crear_etiqueta("Confirme su nueva contraseña:", "Arial", 12, 280, 225, bg="#188999")
-        confirmar_contrasena = self.crear_entry(280, 250, 250, 30, mostrar="*")
-        self.crear_boton("Cambiar contraseña", font=("Arial", 18), x=545, y=250, width=250, height=30)
+        # Limpiar los campos después de guardar
+        self.entry_usuario.delete(0, "end")
+        self.entry_direccion.delete(0, "end")
+        self.entry_tarifa.delete(0, "end")
         
+    def generar_CodigoUnico(self):
+        # Leer los códigos únicos existentes del archivo JSON
+        try:
+            with open("pedidos.json", "r", encoding="utf-8") as archivo:
+                pedidos = json.load(archivo)
+                codigos_existentes = {
+                    pedido["Código único"] 
+                    for usuario in pedidos
+                    for pedido in usuario.get("pedidos",[])
+                    }
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Si el archivo no existe o está vacío, inicializar un conjunto vacío
+            codigos_existentes = set()
+
+        # Generar un código único que no se encuentre en los códigos existentes
+        while True:
+            caracteres = string.ascii_letters + string.digits
+            codigo_unico = ''.join(random.choices(caracteres, k=8))
+            if codigo_unico not in codigos_existentes:
+                return codigo_unico
+                
+class ConsultaPedido_operador(creacion_ventana):
+    def __init__(self,usuario_actual):
+        super().__init__(titulo="Lavalimpia-Recaudador (Ingreso de pedido)", icono="recursosImagenes/fondoL.ico")
+        self.interfaz()
+        self.usuario_actual = usuario_actual
+    def interfaz(self):
+        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
+        # Etiqueta principal
+        self.crear_etiqueta(texto="Consulta de Pedidos por código único", fuente=("Britannic Bold"), tamano=20, x=40, y=30, bg="#188999")
+        self.crear_boton("Volver", font=("Arial", 10), x=840, y=8, command=lambda: self.cambiarVentana(ventana_operador), width=100, height=25, bd=0, cursor="hand2", bg="white")
+
+        # Etiqueta y entrada para el nombre del usuario
+        self.crear_etiqueta(texto="Código único:", fuente=("Arial"), tamano=12, x=40, y=100, bg="#188999")
+        self.entry_usuario = self.crear_entry(x=200, y=100, width=250, height=30)
+
+        # Botón para buscar pedidos
+        self.crear_boton(text="Buscar Pedidos", font=("Arial", 14), x=470, y=100,
+                         command=lambda: self.buscar_pedidos(self.entry_usuario.get()), width=150, height=30)
+
+    def buscar_pedidos(self, codigo_unico):
+        """
+        Busca pedidos en un archivo JSON según el usuario proporcionado.
+
+        :param usuario: Nombre del usuario a buscar.
+        """
+        archivo_json = "pedidos.json"
+        #campo = "Código único"
+        valor = codigo_unico.strip()  # Eliminar espacios en blanco innecesarios
+
+        try:
+            # Leer el archivo JSON
+            with open(archivo_json, 'r', encoding='utf-8') as file:
+                datos = json.load(file)
+
+            # Filtrar los pedidos que coinciden con el usuario
+            pedido_encontrado=None
+            for usuario in datos:
+                for pedido in usuario.get("pedidos",[]):
+                    if pedido.get("Código único")==valor:
+                        pedido_encontrado=pedido
+                        break
+                if pedido_encontrado:
+                    break
+
+
+            if pedido_encontrado:
+                self.ventanaE_InfoPedidoOperador(titulo="Información pedido",ruta_json="pedidos.json",codigo_filtro=valor)
+            else:
+                messagebox.showinfo("Sin resultados", f"No se encontraron pedidos para el usuario '{codigo_unico}'.")
+
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"El archivo {archivo_json} no fue encontrado.")
+        except json.JSONDecodeError:
+            messagebox.showerror("Error", f"El archivo {archivo_json} no contiene un formato JSON válido.")
+#Hasta aquí llega la interfaz del operador
+
+#Todavia no se empieza.
+#Ventana del empleado recaudador.
+class  ventana_EmpleadoRecaudador(creacion_ventana):
+    def __init__(self,usuario_actual):
+        super().__init__(titulo="Lavalimpia-Recaudador",icono="recursosImagenes/fondoL.ico")
+        self.usuario_actual=usuario_actual
+        self.interfaz()
+        
+    
+    def interfaz(self):
+        self.agregar_logo("recursosImagenes/logoLavaLimpia.png",x=0,y=0)
+        self.agregar_logo("recursosImagenes/Logo2.png", x=65, y=280)
+        self.crear_etiqueta(texto="Total a pagar:", fuente=("Arial"),tamano=22,x=380, y=165,bg="#188999",fg="White")
+        self.crear_entry(x=380, y=245, width=250, height=30)
+        self.crear_boton(text="Confirmar pago",font=("Arial",12),x=380, y=350,width=200, height=50)
+        self.crear_boton(text=" Cerrar sesión  ",font=("Arial", 10),x=840,y=8, command=lambda:self.cambiarVentana(ventanaPrincipal),width=100, height=25, bg= "red", fg="white")
+#cierre de la ventana recaudador.        
+
 print("Hola mundo")
