@@ -1,0 +1,59 @@
+[
+  {
+    "nombre": "gerente",
+    "contrasena": "gerencia123",
+    "correo": "gerente@lavalimpia.com",
+    "pedidos": [],
+    "tipoUsuario": "gerente",
+    "fechaCreacion": "2024-12-18 20:49",
+    "codigoUnico": "0"
+  },
+  {
+    "nombre": "joseLavalimpia",
+    "contrasena": "joselito321",
+    "correo": "jose@lavalimpia.com",
+    "pedidos": [],
+    "tipoUsuario": "operador",
+    "fechaCreacion": "2024-12-18 20:49",
+    "codigoUnico": "1"
+  },
+  {
+    "nombre": "marioLavalimpia",
+    "contrasena": "mariito24",
+    "correo": "mario@lavalimpia.com",
+    "pedidos": [],
+    "tipoUsuario": "operador",
+    "fechaCreacion": "2024-12-18 20:49",
+    "codigoUnico": "2"
+  },
+  {
+    "nombre": "alfonso",
+    "contrasena": "lechuga123",
+    "correo": "miau123@mail.xyz",
+    "pedidos": [],
+    "tipoUsuario": "cliente",
+    "fechaCreacion": "2024-12-18 20:49",
+    "codigoUnico": "3"
+  },
+  {
+    "nombre": "tallarin",
+    "contrasena": "tenedor21",
+    "correo": "guauaja9@mail.xyz",
+    "pedidos": [
+      "0",
+      "0"
+    ],
+    "tipoUsuario": "cliente",
+    "fechaCreacion": "2024-12-18 20:49",
+    "codigoUnico": "4"
+  },
+  {
+    "nombre": "juan",
+    "contrasena": "perez123",
+    "correo": "pereira@mail.net",
+    "pedidos": [],
+    "tipoUsuario": "cliente",
+    "fechaCreacion": "2024-12-18 22:47",
+    "codigoUnico": "5"
+  }
+]
