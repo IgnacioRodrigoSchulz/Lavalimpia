@@ -1,0 +1,203 @@
+[
+    {
+        "codigoUnico": "4shON4BH",
+        "direccion": "Lechuga #3000",
+        "usuario": "7",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2024-12-30 16:42",
+        "estadoActual": "Entregado",
+        "estadoHistorial": [
+            [
+                "2024-12-30 16:42",
+                "Recepcionado",
+                "4shON4BH"
+            ],
+            [
+                "2024-12-30 22:42:31.210939",
+                "Procesado",
+                "4shON4BH"
+            ],
+            [
+                "2025-01-01 23:48:52.769649",
+                "Listo para el retiro",
+                "4shON4BH"
+            ],
+            [
+                "2025-01-02 14:00:40.259255",
+                "Entregado",
+                "4shON4BH"
+            ]
+        ],
+        "fechaPlazo": "2025-01-01 16:42",
+        "usuario_nombre": "Pancracio_01"
+    },
+    {
+        "codigoUnico": "Ewr0Fbdi",
+        "direccion": "Lechuga #4560",
+        "usuario": "6",
+        "tarifa": 15000.0,
+        "fechaCreacion": "2024-12-30 16:43",
+        "estadoActual": "Entregado",
+        "estadoHistorial": [
+            [
+                "2024-12-30 16:43",
+                "Recepcionado",
+                "Ewr0Fbdi"
+            ],
+            [
+                "2025-01-01 23:48:57.371111",
+                "Listo para el retiro",
+                "Ewr0Fbdi"
+            ],
+            [
+                "2025-01-02 00:48:44.608624",
+                "Entregado",
+                "Ewr0Fbdi"
+            ]
+        ],
+        "fechaPlazo": "2025-01-01 16:43",
+        "usuario_nombre": "juan"
+    },
+    {
+        "codigoUnico": "jaKIl8oe",
+        "direccion": "Mondongo #450",
+        "usuario": "6",
+        "tarifa": 12000.0,
+        "fechaCreacion": "2024-12-30 16:44",
+        "estadoActual": "Entregado",
+        "estadoHistorial": [
+            [
+                "2024-12-30 16:44",
+                "Recepcionado",
+                "jaKIl8oe"
+            ],
+            [
+                "2025-01-01 23:49:02.164791",
+                "Listo para el retiro",
+                "jaKIl8oe"
+            ],
+            [
+                "2025-01-02 13:47:11.180848",
+                "Entregado",
+                "jaKIl8oe"
+            ]
+        ],
+        "fechaPlazo": "2025-01-01 16:44",
+        "usuario_nombre": "juan"
+    },
+    {
+        "codigoUnico": "gUmIFZRy",
+        "direccion": "AV. Francia #1220",
+        "usuario": "5",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2024-12-30 16:44",
+        "estadoActual": "Entregado",
+        "estadoHistorial": [
+            [
+                "2024-12-30 16:44",
+                "Recepcionado",
+                "gUmIFZRy"
+            ],
+            [
+                "2025-01-01 23:49:07.474277",
+                "Listo para el retiro",
+                "gUmIFZRy"
+            ],
+            [
+                "2025-01-02 14:00:22.806929",
+                "Entregado",
+                "gUmIFZRy"
+            ]
+        ],
+        "fechaPlazo": "2025-01-01 16:44",
+        "usuario_nombre": "tallarin"
+    },
+    {
+        "codigoUnico": "EA4TLT0w",
+        "direccion": "Tallarin #3000",
+        "usuario": "4",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2025-01-01 23:49",
+        "estadoActual": "Entregado",
+        "estadoHistorial": [
+            [
+                "2025-01-01 23:49",
+                "Recepcionado",
+                "EA4TLT0w"
+            ],
+            [
+                "2025-01-02 00:30:24.480268",
+                "Procesado",
+                "EA4TLT0w"
+            ],
+            [
+                "2025-01-02 00:34:54.368330",
+                "Listo para el retiro",
+                "EA4TLT0w"
+            ],
+            [
+                "2025-01-02 14:00:53.447340",
+                "Entregado",
+                "EA4TLT0w"
+            ]
+        ],
+        "fechaPlazo": "2025-01-03 23:49",
+        "usuario_nombre": "alfonso"
+    },
+    {
+        "codigoUnico": "zwWighkR",
+        "direccion": "Lechuga #3000",
+        "usuario": "7",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2025-01-02 14:18",
+        "estadoActual": "Listo para el retiro",
+        "estadoHistorial": [
+            [
+                "2025-01-02 14:18",
+                "Recepcionado",
+                "zwWighkR"
+            ],
+            [
+                "2025-01-03 17:41:37.586707",
+                "Listo para el retiro",
+                "zwWighkR"
+            ]
+        ],
+        "fechaPlazo": "2025-01-04 14:18",
+        "usuario_nombre": "Pancracio_01"
+    },
+    {
+        "codigoUnico": "sfyk11n8",
+        "direccion": "lechuga #3000",
+        "usuario": "7",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2025-01-03 13:33",
+        "estadoActual": "Recepcionado",
+        "estadoHistorial": [
+            [
+                "2025-01-03 13:33",
+                "Recepcionado",
+                "sfyk11n8"
+            ]
+        ],
+        "fechaPlazo": "2025-01-05 13:33",
+        "usuario_nombre": "Pancracio_01"
+    },
+    {
+        "codigoUnico": "WnoJkfIM",
+        "direccion": "Republica #350",
+        "usuario": "8",
+        "tarifa": 5000.0,
+        "fechaCreacion": "2025-01-03 14:37",
+        "estadoActual": "Recepcionado",
+        "estadoHistorial": [
+            [
+                "2025-01-03 14:37",
+                "Recepcionado",
+                "WnoJkfIM"
+            ]
+        ],
+        "fechaPlazo": "2025-01-05 14:37",
+        "usuario_nombre": "Poseidon_XD"
+    }
+]

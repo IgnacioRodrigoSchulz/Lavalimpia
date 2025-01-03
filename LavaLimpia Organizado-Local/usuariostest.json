@@ -1,0 +1,97 @@
+[
+    {
+        "nombre": "gerente",
+        "contrasena": "gerencia123",
+        "correo": "gerente@lavalimpia.com",
+        "pedidos": [],
+        "tipoUsuario": "gerente",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "0"
+    },
+    {
+        "nombre": "recaudador",
+        "contrasena": "plataMoney123",
+        "correo": "recaudador@lavalimpia.com",
+        "pedidos": [],
+        "tipoUsuario": "recaudador",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "1"
+    },
+    {
+        "nombre": "joseLavalimpia",
+        "contrasena": "joselito321",
+        "correo": "jose@lavalimpia.com",
+        "pedidos": [],
+        "tipoUsuario": "operador",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "2"
+    },
+    {
+        "nombre": "marioLavalimpia",
+        "contrasena": "mariito24",
+        "correo": "mario@lavalimpia.com",
+        "pedidos": [],
+        "tipoUsuario": "operador",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "3"
+    },
+    {
+        "nombre": "alfonso",
+        "contrasena": "lechuga123",
+        "correo": "miau123@mail.xyz",
+        "pedidos": [
+            "EA4TLT0w"
+        ],
+        "tipoUsuario": "cliente",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "4"
+    },
+    {
+        "nombre": "tallarin",
+        "contrasena": "tenedor21",
+        "correo": "guauaja9@mail.xyz",
+        "pedidos": [
+            "gUmIFZRy"
+        ],
+        "tipoUsuario": "cliente",
+        "fechaCreacion": "2024-12-18 20:49",
+        "codigoUnico": "5"
+    },
+    {
+        "nombre": "juan",
+        "contrasena": "perez123",
+        "correo": "pereira@mail.net",
+        "pedidos": [
+            "Ewr0Fbdi",
+            "jaKIl8oe"
+        ],
+        "tipoUsuario": "cliente",
+        "fechaCreacion": "2024-12-18 22:47",
+        "codigoUnico": "6"
+    },
+    {
+        "nombre": "Pancracio_01",
+        "contrasena": "Pancracio1#",
+        "correo": "Pancracio@gmail.com",
+        "pedidos": [
+            "4shON4BH",
+            "zwWighkR",
+            "mOjbwTvO"
+        ],
+        "tipoUsuario": "cliente",
+        "fechaCreacion": "2024-12-23 00:58",
+        "codigoUnico": "7"
+    },
+    {
+        "nombre": "Poseidon_XD",
+        "contrasena": "Poseidon_2#",
+        "correo": "chimichanga250@gmail.com",
+        "pedidos": [
+            "WnoJkfIM",
+            "uF4DyC5b"
+        ],
+        "tipoUsuario": "cliente",
+        "fechaCreacion": "2025-01-03 13:47",
+        "codigoUnico": "8"
+    }
+]
