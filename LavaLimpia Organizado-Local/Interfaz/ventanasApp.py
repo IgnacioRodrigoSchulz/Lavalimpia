@@ -38,7 +38,7 @@ from tkinter import * # Importa todos los componentes de Tkinter.
 class ventanaPrincipal(creacion_ventana): # Clase que representa la ventana principal, heredando de `creacion_ventana`.
     def __init__(self): # Constructor de la clase.
         super().__init__(titulo="Lavalimpia-Inicio de sesión", icono="recursosImagenes/fondoL.ico")
-        # Inicializa la ventana principal con un título y un ícono.
+        ## Atributo encapsulado para almacenar al usuario autenticado.# Inicializa la ventana principal con un título y un ícono.
         self.usuario_actual = None  # Variable para almacenar el usuario autenticado.# Inicialización de una instancia de usuario actual como None.
         self.interfaz() # Llama al método que define los elementos de la interfaz gráfica.
 
@@ -75,6 +75,10 @@ class ventanaPrincipal(creacion_ventana): # Clase que representa la ventana prin
         )
     # Método para validar las credenciales ingresadas por el usuario.
     def validar_credenciales(self, usuario, contrasena):
+        """
+        Método que valida las credenciales del usuario y asigna la instancia del usuario actual.
+        Este método aplica encapsulamiento al manejar internamente la autenticación.
+        """
         archivo_usuarios = "usuariostest.json" # Archivo JSON donde se almacenan los datos de usuarios.
         # Verifica si los campos están vacíos.
         if not usuario or not contrasena:
@@ -221,7 +225,7 @@ class ventana_usuario(creacion_ventana):  # Clase que representa la ventana para
         if not self.pedidos_usuario:
             self.cargar_pedidos(mostrar_ventana=False)
             if not self.pedidos_usuario:
-                messagebox.showinfo("Estado del Pedido", "No tienes pedidos registrados para mostrar.")
+                #messagebox.showinfo("Estado del Pedido", "No tienes pedidos registrados para mostrar.")
                 return
             
         # Crea una ventana emergente para consultar el estado del pedido.
@@ -1511,7 +1515,7 @@ class ventana_EmpleadoRecaudador(creacion_ventana):
         usuario_var = tk.StringVar(value="Usuario: N/A")
     
         tk.Label(frame, textvariable=tarifa_var, anchor="w", justify="left").pack(fill=tk.X, pady=5)
-        tk.Label(frame, textvariable=usuario_var, anchor="w", justify="left").pack(fill=tk.X, pady=5)
+        tk.Label(frame, textvariable=usuario_var, anchor="w", justify="left").pack(fill=tk.X, pady=5) #el parámetro anchor="w" se utiliza para controlar cómo se alinea el texto dentro del widget. #justify="left" alinea el texto a la izquierda en líneas múltiples.
 
         # Botón para confirmar pago
         confirmar_pago_button = tk.Button(
@@ -1602,6 +1606,15 @@ class pedidosVer(creacion_ventana):
         def cargar_usuarios(ruta_archivo):
             with open(ruta_archivo, 'r', encoding='utf-8') as archivo: #Al usar 'utf-8', aseguras que los caracteres especiales y acentuados en el archivo se lean correctamente, evitando problemas de codificación 
                                                                        #abre el archivo en modo lectura ('r') sirve para indicar que el archivo se debe abrir en modo lectura.
+                '''
+                'r': Lectura - Abre un archivo para leerlo. El archivo debe existir.
+
+                'w': Escritura - Abre un archivo para escribir. Si el archivo existe, su contenido será borrado. Si no existe, se crea uno nuevo.
+
+                'a': Añadir - Abre un archivo para escribir en él sin borrar su contenido. Si el archivo no existe, se crea uno nuevo.
+
+                'b': Binario - Abre un archivo en modo binario. Se usa junto con otros modos, por ejemplo, 'rb' para leer en binario o 'wb' para escribir en binario.
+                '''
                 datos = json.load(archivo)
             return datos
         
@@ -1640,6 +1653,11 @@ class pedidosVer(creacion_ventana):
         actualizar_tabla(tabla, pedidos_filtrados, usuario_dict)
 #Aquí termina la ventana del recaudador.
 
+"""
+NOTA: Los usuarios y pedidos se manejan como diccionarios en lugar de instancias de clases.
+Esto se decidió para facilitar la carga y manipulación de datos desde/para archivos JSON.
+Los diccionarios permiten una implementación más sencilla y directa, adecuada para el tamaño y alcance del proyecto.
+"""
 
 
 ###### FIN ########
